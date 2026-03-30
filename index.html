@@ -12,9 +12,9 @@
     /* ── CUSTOM FONT ──────────────────────────────────────── */
     @font-face {
       font-family: '8BitFont';
-      src: url('./assets/fonts/8bit-font.woff2') format('woff2'),
-           url('./assets/fonts/8bit-font.woff')  format('woff'),
-           url('./assets/fonts/8bit-font.ttf')   format('truetype');
+      src: url('./Thikpanet1-Regular.woff2') format('woff2'),
+           url('./Thikpanet1-Regular.ttf')   format('truetype'),
+           url('./8bit-font.woff2')          format('woff2');
       font-display: swap;
     }
 
@@ -42,13 +42,13 @@
     /* Drop your 10-frame gold coin GIF at ./assets/cursor.gif
        Recommended size: 32×32px                              */
     body {
-      cursor: url('./assets/cursor.gif') 16 16, auto;
+      cursor: url('./cursor.gif') 16 16, auto;
       background: var(--black);
       color: var(--white);
       font-family: var(--pixel);
       overflow-x: hidden;
     }
-    a, button { cursor: url('./assets/cursor.gif') 16 16, pointer; }
+    a, button { cursor: url('./cursor.gif') 16 16, pointer; }
 
     /* ── SCANLINE OVERLAY ────────────────────────────────── */
     body::after {
@@ -174,7 +174,7 @@
     .hero-bg {
       position: absolute;
       inset: 0;
-      background-image: url('./assets/bg.gif');
+      background-image: url('./BG.gif');
       background-size: cover;
       background-position: center;
       image-rendering: pixelated;
@@ -519,7 +519,7 @@
       position: relative;
       overflow: hidden;
       transition: transform 0.25s;
-      cursor: url('./assets/cursor.gif') 16 16, pointer;
+      cursor: url('./cursor.gif') 16 16, pointer;
     }
     .shop-card:hover { transform: translateY(-6px); }
     .shop-card:hover .shop-card-overlay { opacity: 1; }
@@ -942,7 +942,7 @@
         REPLACE: Your animated logo.gif
         Recommended: ~200x80px, transparent background
       -->
-      <img src="./assets/logo.gif" alt="8-Bit Brewing Co" onerror="this.style.display='none'; this.parentElement.innerHTML='<span style=\'font-family:var(--pixel);font-size:0.9rem;color:var(--gold);text-shadow:2px 2px 0 #c48a00\'>8-BIT<br><span style=\'font-size:0.55rem\'>BREWING CO</span></span>'">
+      <img src="./Logoanim8bit.gif" alt="8-Bit Brewing Co" onerror="this.style.display='none'; this.parentElement.innerHTML='<span style=\'font-family:var(--pixel);font-size:0.9rem;color:var(--gold);text-shadow:2px 2px 0 #c48a00\'>8-BIT<br><span style=\'font-size:0.55rem\'>BREWING CO</span></span>'">
     </a>
 
     <button class="hamburger" id="hamburger" aria-label="Menu">
@@ -961,7 +961,7 @@
         REPLACE: Your animated mascot character.gif
         The pixel beer ghost from your screenshot
       -->
-      <img src="./assets/mascot.gif" alt="8-Bit Mascot" onerror="this.style.display='none'">
+      <img src="./Logoanim8bit.gif" alt="8-Bit Mascot" onerror="this.style.display='none'">
     </div>
   </nav>
 
@@ -1434,7 +1434,7 @@
        FOOTER
   ══════════════════════════════════════════ -->
   <footer>
-    <img src="./assets/mascot.gif" alt="" style="height:60px;image-rendering:pixelated;opacity:0.7" onerror="this.style.display='none'">
+    <img src="./Logoanim8bit.gif" alt="" style="height:60px;image-rendering:pixelated;opacity:0.7" onerror="this.style.display='none'">
     <ul class="footer-links">
       <li><a href="#beer">Beer</a></li>
       <li><a href="#food">Food</a></li>
@@ -1574,3 +1574,4 @@
   </script>
 </body>
 </html>
+
