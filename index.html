@@ -8,24 +8,30 @@
 
 <style>
 
-/* GLOBAL SCALE */
-html { font-size: 175%; }
+/* GLOBAL SCALE FIX */
+html {
+  font-size: 175%;
+}
 
+/* RESET */
 * { box-sizing: border-box; margin: 0; padding: 0; }
 
+/* VARIABLES */
 :root {
   --gold:#FFB800;
   --gold-dim:#c48a00;
+  --gold-glow:#ffe066;
   --black:#000;
-  --white:#fff;
   --dark:#0a0a0a;
+  --white:#f0f0f0;
   --pixel:'Press Start 2P', monospace;
 }
 
+/* BODY */
 body {
-  font-family: var(--pixel);
   background:#000;
   color:#fff;
+  font-family:var(--pixel);
   line-height:1.6;
 }
 
@@ -36,14 +42,15 @@ body {
   left:0;
   right:0;
   display:flex;
-  justify-content:space-between;
   align-items:center;
+  justify-content:space-between;
   padding:8px 24px;
-  background:rgba(0,0,0,0.95);
+  background:rgba(0,0,0,0.9);
   border-bottom:3px solid var(--gold);
   z-index:1000;
 }
 
+/* LOGO FIX */
 .nav-logo img {
   height:140px;
   image-rendering:pixelated;
@@ -58,28 +65,14 @@ body {
 }
 
 .nav-links a {
-  text-decoration:none;
   color:#fff;
+  text-decoration:none;
   font-size:0.7rem;
+  letter-spacing:0.1em;
 }
 
 .nav-links a:hover {
   color:var(--gold);
-}
-
-/* HAMBURGER */
-.hamburger {
-  display:none;
-  flex-direction:column;
-  gap:6px;
-  background:none;
-  border:none;
-}
-
-.hamburger span {
-  width:30px;
-  height:3px;
-  background:var(--gold);
 }
 
 /* HERO */
@@ -89,27 +82,34 @@ body {
   align-items:center;
   justify-content:center;
   text-align:center;
-  padding:0 20px;
+  background:#111;
 }
 
+/* HERO TEXT FIX */
 .hero-title {
   font-size:clamp(2rem,5vw,4rem);
   color:var(--gold);
+  text-shadow:
+    3px 3px #000,
+    6px 6px var(--gold-dim);
+}
+
+.hero-tagline {
+  color:var(--gold);
+  font-size:0.6rem;
+  letter-spacing:0.3em;
 }
 
 .hero-subtitle {
-  font-size:0.7rem;
+  font-size:0.6rem;
   opacity:0.7;
 }
 
+/* BUTTONS */
 .btn {
-  display:inline-block;
-  margin-top:20px;
-  padding:14px 28px;
   font-size:0.6rem;
-  text-decoration:none;
-  border:none;
-  min-height:48px;
+  padding:12px 24px;
+  margin-top:20px;
 }
 
 .btn-gold {
@@ -117,81 +117,15 @@ body {
   color:#000;
 }
 
-/* MOBILE UI */
-@media (max-width: 900px) {
-
-  html { font-size: 160%; }
-
-  /* NAVBAR */
-  .nav-links {
-    display:none;
-  }
-
-  .hamburger {
-    display:flex;
-  }
-
-  .nav-logo img {
-    height:64px;
-  }
-
-  /* FULLSCREEN MENU */
-  .nav-links.open {
-    display:flex;
-    flex-direction:column;
-    align-items:center;
-    justify-content:center;
-    gap:40px;
-    position:fixed;
-    inset:0;
-    background:#000;
-    font-size:1.4rem;
-  }
-
-  /* HERO */
-  .hero-title {
-    font-size:clamp(2rem,10vw,3rem);
-  }
-
-  .btn {
-    width:100%;
-  }
-
+/* SECTION */
+section {
+  padding:80px 24px;
 }
 
-/* STICKY CTA (MOBILE ONLY) */
-.mobile-cta {
-  display:none;
-}
-
-@media (max-width:900px) {
-  .mobile-cta {
-    display:flex;
-    position:fixed;
-    bottom:0;
-    left:0;
-    right:0;
-    background:#000;
-    border-top:3px solid var(--gold);
-    z-index:999;
-  }
-
-  .mobile-cta a {
-    flex:1;
-    text-align:center;
-    padding:16px;
-    text-decoration:none;
-    font-size:0.6rem;
-  }
-
-  .mobile-cta a:first-child {
-    background:var(--gold);
-    color:#000;
-  }
-
-  .mobile-cta a:last-child {
-    color:var(--gold);
-  }
+.section-title {
+  font-size:1.2rem;
+  color:var(--gold);
+  margin-bottom:20px;
 }
 
 </style>
@@ -202,52 +136,38 @@ body {
 <!-- NAVBAR -->
 <nav id="navbar">
 
-  <a class="nav-logo">
+  <a href="#" class="nav-logo">
     <img src="./logo.png" alt="8-Bit Brewing Co">
   </a>
 
-  <ul class="nav-links" id="nav-links">
-    <li><a href="#">Beer</a></li>
-    <li><a href="#">Food</a></li>
-    <li><a href="#">Shop</a></li>
-    <li><a href="#">Contact</a></li>
+  <ul class="nav-links">
+    <li><a href="#beer">Beer</a></li>
+    <li><a href="#food">Food</a></li>
+    <li><a href="#shop">Shop</a></li>
+    <li><a href="#contact">Contact</a></li>
   </ul>
-
-  <button class="hamburger" id="hamburger">
-    <span></span><span></span><span></span>
-  </button>
 
 </nav>
 
 <!-- HERO -->
 <section id="hero">
-
   <div>
-    <h1 class="hero-title">8-BIT<br>BREWING CO.</h1>
-    <p class="hero-subtitle">Craft Beer · Leveled Up</p>
+    <p class="hero-tagline">★ Murrieta, California ★</p>
 
-    <a class="btn btn-gold">View Tap List</a>
+    <h1 class="hero-title">
+      8-BIT<br>BREWING CO.
+    </h1>
+
+    <p class="hero-subtitle">
+      Craft Beer · Leveled Up
+    </p>
+
+    <div>
+      <button class="btn btn-gold">View Tap List</button>
+      <button class="btn">Enter Shop</button>
+    </div>
   </div>
-
 </section>
-
-<!-- MOBILE CTA -->
-<div class="mobile-cta">
-  <a href="tel:19510000000">Call</a>
-  <a href="https://maps.google.com">Directions</a>
-</div>
-
-<script>
-
-/* HAMBURGER */
-const hamburger = document.getElementById('hamburger');
-const navLinks = document.getElementById('nav-links');
-
-hamburger.addEventListener('click', () => {
-  navLinks.classList.toggle('open');
-});
-
-</script>
 
 </body>
 </html>
