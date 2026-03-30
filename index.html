@@ -38,17 +38,26 @@
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     html { scroll-behavior: smooth; }
 
-    /* ── CUSTOM CURSOR ───────────────────────────────────── */
-    /* Drop your 10-frame gold coin GIF at ./assets/cursor.gif
-       Recommended size: 32×32px                              */
+    /* ── CUSTOM CURSOR (JS-powered, bypasses browser size limits) ── */
     body {
-      cursor: url('./cursor.gif') 16 16, auto;
+      cursor: none;
       background: var(--black);
       color: var(--white);
       font-family: var(--pixel);
       overflow-x: hidden;
     }
-    a, button { cursor: url('./cursor.gif') 16 16, pointer; }
+    a, button { cursor: none; }
+
+    #custom-cursor {
+      position: fixed;
+      width: 64px;
+      height: 64px;
+      pointer-events: none;
+      z-index: 99999;
+      transform: translate(-50%, -50%);
+      image-rendering: pixelated;
+      display: none;
+    }
 
     /* ── SCANLINE OVERLAY ────────────────────────────────── */
     body::after {
@@ -98,9 +107,9 @@
     }
     #navbar.scrolled { background: rgba(0,0,0,0.97); }
 
-    /* Logo GIF — replace src with your animated logo.gif */
+    /* Logo — desktop */
     .nav-logo img {
-      height: 72px;
+      height: 100px;
       image-rendering: pixelated;
     }
 
@@ -111,7 +120,7 @@
     }
     .nav-links a {
       font-family: var(--pixel);
-      font-size: 0.85rem;
+      font-size: 1.15rem;
       letter-spacing: 0.12em;
       color: var(--white);
       text-decoration: none;
@@ -131,9 +140,9 @@
     .nav-links a:hover { color: var(--gold); }
     .nav-links a:hover::after { width: 100%; }
 
-    /* Mascot character GIF in corner */
+    /* Mascot character GIF */
     .nav-mascot img {
-      height: 80px;
+      height: 110px;
       image-rendering: pixelated;
       animation: mascot-bob 1.2s ease-in-out infinite alternate;
     }
@@ -142,21 +151,29 @@
       to   { transform: translateY(-6px); }
     }
 
-    /* Mobile hamburger */
+    /* ── HAMBURGER → X TOGGLE ────────────────────────────── */
     .hamburger {
       display: none;
       flex-direction: column;
-      gap: 5px;
+      justify-content: center;
+      gap: 6px;
       background: none;
       border: none;
-      padding: 4px;
+      padding: 6px;
+      width: 40px;
+      height: 40px;
     }
     .hamburger span {
       display: block;
       width: 28px; height: 3px;
       background: var(--gold);
-      transition: all 0.2s;
+      transition: transform 0.25s, opacity 0.25s;
+      transform-origin: center;
     }
+    /* X state */
+    .hamburger.open span:nth-child(1) { transform: translateY(9px) rotate(45deg); }
+    .hamburger.open span:nth-child(2) { opacity: 0; transform: scaleX(0); }
+    .hamburger.open span:nth-child(3) { transform: translateY(-9px) rotate(-45deg); }
 
     /* ── HERO ────────────────────────────────────────────── */
     #hero {
@@ -894,21 +911,31 @@
     }
 
     /* ── RESPONSIVE ──────────────────────────────────────── */
-    @media (max-width: 768px) {
+    /* Desktop: hide hamburger, mascot stays right, links in center */
+    #navbar { flex-wrap: wrap; }
+    .nav-links { flex: 1; justify-content: center; }
+    .hamburger { display: none; }
+
+    @media (max-width: 900px) {
+      /* Mobile navbar: Logo [order1] | Mascot [order2] | Hamburger [order3] */
       .nav-links { display: none; }
       .nav-links.open {
         display: flex;
         flex-direction: column;
         position: fixed;
-        top: 0; left: 0; right: 0;
-        background: rgba(0,0,0,0.97);
-        padding: 100px 40px 40px;
-        gap: 32px;
+        top: 0; left: 0; right: 0; bottom: 0;
+        background: rgba(0,0,0,0.98);
+        padding: 120px 48px 48px;
+        gap: 36px;
         z-index: 999;
         border-bottom: 3px solid var(--gold);
       }
-      .nav-links.open a { font-size: 1rem; }
+      .nav-links.open a { font-size: 1.3rem; }
       .hamburger { display: flex; }
+      /* On mobile, nav-links order pushes it out of flow (it's fixed) */
+      /* Mascot stays visible in header at order:2 */
+      .nav-mascot img { height: 72px; }
+      .nav-logo img { height: 72px; }
 
       .food-columns { grid-template-columns: 1fr; gap: 40px; }
       .shop-card.featured { grid-column: span 1; grid-template-columns: 1fr; }
@@ -918,6 +945,8 @@
   </style>
 </head>
 <body>
+  <!-- JS cursor follower — scales the GIF to 64px, bypasses browser cursor limits -->
+  <img id="custom-cursor" src="./cursor.gif" alt="">
 
   <!-- ══════════════════════════════════════════
        AGE GATE
@@ -937,32 +966,28 @@
        NAVBAR
   ══════════════════════════════════════════ -->
   <nav id="navbar">
-    <a href="#hero" class="nav-logo">
-      <!--
-        REPLACE: Your animated logo.gif
-        Recommended: ~200x80px, transparent background
-      -->
+    <!-- Logo — always first -->
+    <a href="#hero" class="nav-logo" style="order:1">
       <img src="./logo.png" alt="8-Bit Brewing Co" onerror="this.style.display='none'; this.parentElement.innerHTML='<span style=\'font-family:var(--pixel);font-size:0.9rem;color:var(--gold);text-shadow:2px 2px 0 #c48a00\'>8-BIT<br><span style=\'font-size:0.55rem\'>BREWING CO</span></span>'">
     </a>
 
-    <button class="hamburger" id="hamburger" aria-label="Menu">
+    <!-- Mascot — middle on mobile, right on desktop -->
+    <div class="nav-mascot" style="order:2">
+      <img src="./Logoanim8bit.gif" alt="8-Bit Mascot" onerror="this.style.display='none'">
+    </div>
+
+    <!-- Hamburger — rightmost on mobile, hidden on desktop -->
+    <button class="hamburger" id="hamburger" aria-label="Open menu" style="order:3">
       <span></span><span></span><span></span>
     </button>
 
-    <ul class="nav-links" id="nav-links">
+    <!-- Nav links — desktop center, mobile overlay -->
+    <ul class="nav-links" id="nav-links" style="order:2">
       <li><a href="#beer">Beer</a></li>
       <li><a href="#food">Food</a></li>
       <li><a href="#shop">Shop</a></li>
       <li><a href="#contact">Contact</a></li>
     </ul>
-
-    <div class="nav-mascot">
-      <!--
-        REPLACE: Your animated mascot character.gif
-        The pixel beer ghost from your screenshot
-      -->
-      <img src="./Logoanim8bit.gif" alt="8-Bit Mascot" onerror="this.style.display='none'">
-    </div>
   </nav>
 
   <!-- ══════════════════════════════════════════
@@ -1464,20 +1489,39 @@
       setTimeout(() => ageGate.classList.add('hidden'), 500);
     }
 
+    /* ── CUSTOM CURSOR (desktop only — no touch) ───────── */
+    const cursorEl = document.getElementById('custom-cursor');
+    const isTouch = window.matchMedia('(hover: none)').matches;
+    if (!isTouch) {
+      cursorEl.style.display = 'block';
+      document.addEventListener('mousemove', (e) => {
+        cursorEl.style.left = e.clientX + 'px';
+        cursorEl.style.top  = e.clientY + 'px';
+      });
+      document.addEventListener('mouseleave', () => cursorEl.style.display = 'none');
+      document.addEventListener('mouseenter', () => cursorEl.style.display = 'block');
+    }
+
     /* ── NAVBAR SCROLL ─────────────────────────────────── */
     const navbar = document.getElementById('navbar');
     window.addEventListener('scroll', () => {
       navbar.classList.toggle('scrolled', window.scrollY > 60);
     });
 
-    /* ── HAMBURGER ─────────────────────────────────────── */
+    /* ── HAMBURGER → X TOGGLE ──────────────────────────── */
     const hamburger = document.getElementById('hamburger');
     const navLinks  = document.getElementById('nav-links');
     hamburger.addEventListener('click', () => {
-      navLinks.classList.toggle('open');
+      const isOpen = navLinks.classList.toggle('open');
+      hamburger.classList.toggle('open', isOpen);
+      hamburger.setAttribute('aria-label', isOpen ? 'Close menu' : 'Open menu');
     });
     navLinks.querySelectorAll('a').forEach(a => {
-      a.addEventListener('click', () => navLinks.classList.remove('open'));
+      a.addEventListener('click', () => {
+        navLinks.classList.remove('open');
+        hamburger.classList.remove('open');
+        hamburger.setAttribute('aria-label', 'Open menu');
+      });
     });
 
     /* ── SCROLL REVEAL ─────────────────────────────────── */
@@ -1499,33 +1543,6 @@
     /* ── TICKER DUPLICATE (seamless loop) ─────────────── */
     const ticker = document.getElementById('ticker-inner');
     ticker.innerHTML += ticker.innerHTML; // double it for seamless wrap
-
-    /* ── PIXEL CURSOR TRAIL (optional sparkle effect) ─── */
-    const trail = [];
-    const TRAIL_LENGTH = 6;
-    document.addEventListener('mousemove', (e) => {
-      const dot = document.createElement('div');
-      dot.style.cssText = `
-        position:fixed;
-        left:${e.clientX - 3}px;
-        top:${e.clientY - 3}px;
-        width:6px;height:6px;
-        background:var(--gold);
-        pointer-events:none;
-        z-index:9998;
-        image-rendering:pixelated;
-        opacity:0.7;
-        transition:opacity 0.4s,transform 0.4s;
-      `;
-      document.body.appendChild(dot);
-      trail.push(dot);
-      if (trail.length > TRAIL_LENGTH) {
-        const old = trail.shift();
-        old.style.opacity = '0';
-        old.style.transform = 'scale(0)';
-        setTimeout(() => old.remove(), 400);
-      }
-    });
 
     /* ── SMOOTH ACTIVE NAV ─────────────────────────────── */
     const sections = document.querySelectorAll('section[id]');
