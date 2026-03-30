@@ -1,0 +1,1576 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>8-Bit Brewing Co. — Murrieta, CA</title>
+
+  <!-- =====================================================
+       ASSET PATHS — update these to match your file names
+       ===================================================== -->
+  <style>
+    /* ── CUSTOM FONT ──────────────────────────────────────── */
+    @font-face {
+      font-family: '8BitFont';
+      src: url('./assets/fonts/8bit-font.woff2') format('woff2'),
+           url('./assets/fonts/8bit-font.woff')  format('woff'),
+           url('./assets/fonts/8bit-font.ttf')   format('truetype');
+      font-display: swap;
+    }
+
+    /* Fallback if custom font hasn't loaded yet */
+    @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+
+    /* ── CSS VARIABLES ───────────────────────────────────── */
+    :root {
+      --gold:      #FFB800;
+      --gold-dim:  #c48a00;
+      --gold-glow: #ffe066;
+      --black:     #000000;
+      --dark:      #0a0a0a;
+      --red:       #e63946;
+      --green:     #2dc653;
+      --white:     #f0f0f0;
+      --pixel: 'Press Start 2P', '8BitFont', monospace;
+    }
+
+    /* ── RESET ───────────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+
+    /* ── CUSTOM CURSOR ───────────────────────────────────── */
+    /* Drop your 10-frame gold coin GIF at ./assets/cursor.gif
+       Recommended size: 32×32px                              */
+    body {
+      cursor: url('./assets/cursor.gif') 16 16, auto;
+      background: var(--black);
+      color: var(--white);
+      font-family: var(--pixel);
+      overflow-x: hidden;
+    }
+    a, button { cursor: url('./assets/cursor.gif') 16 16, pointer; }
+
+    /* ── SCANLINE OVERLAY ────────────────────────────────── */
+    body::after {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background: repeating-linear-gradient(
+        0deg,
+        transparent,
+        transparent 2px,
+        rgba(0,0,0,0.08) 2px,
+        rgba(0,0,0,0.08) 4px
+      );
+      pointer-events: none;
+      z-index: 9999;
+    }
+
+    /* ── PIXEL BORDER MIXIN (box-shadow trick) ───────────── */
+    .pixel-border {
+      box-shadow:
+        0 -4px 0 0 var(--gold),
+        0  4px 0 0 var(--gold),
+       -4px 0  0 0 var(--gold),
+        4px 0  0 0 var(--gold);
+    }
+    .pixel-border-sm {
+      box-shadow:
+        0 -2px 0 0 var(--gold),
+        0  2px 0 0 var(--gold),
+       -2px 0  0 0 var(--gold),
+        2px 0  0 0 var(--gold);
+    }
+
+    /* ── NAVBAR ──────────────────────────────────────────── */
+    #navbar {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px 32px;
+      background: rgba(0,0,0,0.85);
+      backdrop-filter: blur(4px);
+      border-bottom: 3px solid var(--gold);
+      transition: background 0.3s;
+    }
+    #navbar.scrolled { background: rgba(0,0,0,0.97); }
+
+    /* Logo GIF — replace src with your animated logo.gif */
+    .nav-logo img {
+      height: 72px;
+      image-rendering: pixelated;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 48px;
+      list-style: none;
+    }
+    .nav-links a {
+      font-family: var(--pixel);
+      font-size: 0.85rem;
+      letter-spacing: 0.12em;
+      color: var(--white);
+      text-decoration: none;
+      text-transform: uppercase;
+      position: relative;
+      padding-bottom: 4px;
+      transition: color 0.2s;
+    }
+    .nav-links a::after {
+      content: '';
+      position: absolute;
+      bottom: -2px; left: 0;
+      width: 0; height: 3px;
+      background: var(--gold);
+      transition: width 0.25s;
+    }
+    .nav-links a:hover { color: var(--gold); }
+    .nav-links a:hover::after { width: 100%; }
+
+    /* Mascot character GIF in corner */
+    .nav-mascot img {
+      height: 80px;
+      image-rendering: pixelated;
+      animation: mascot-bob 1.2s ease-in-out infinite alternate;
+    }
+    @keyframes mascot-bob {
+      from { transform: translateY(0px); }
+      to   { transform: translateY(-6px); }
+    }
+
+    /* Mobile hamburger */
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      background: none;
+      border: none;
+      padding: 4px;
+    }
+    .hamburger span {
+      display: block;
+      width: 28px; height: 3px;
+      background: var(--gold);
+      transition: all 0.2s;
+    }
+
+    /* ── HERO ────────────────────────────────────────────── */
+    #hero {
+      position: relative;
+      height: 100vh;
+      min-height: 600px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      overflow: hidden;
+    }
+
+    /* Your animated background GIF goes here */
+    .hero-bg {
+      position: absolute;
+      inset: 0;
+      background-image: url('./assets/bg.gif');
+      background-size: cover;
+      background-position: center;
+      image-rendering: pixelated;
+      filter: brightness(0.45);
+    }
+
+    /* CRT vignette */
+    .hero-bg::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse at center,
+        transparent 55%,
+        rgba(0,0,0,0.75) 100%
+      );
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 2;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 24px;
+    }
+
+    .hero-tagline {
+      font-family: var(--pixel);
+      font-size: clamp(0.55rem, 1.8vw, 0.9rem);
+      letter-spacing: 0.3em;
+      color: var(--gold);
+      text-transform: uppercase;
+      animation: blink-in 0.6s steps(1) 0.4s both;
+    }
+
+    .hero-title {
+      font-family: var(--pixel);
+      font-size: clamp(2rem, 6vw, 5rem);
+      line-height: 1.2;
+      color: var(--gold);
+      text-shadow:
+        4px 4px 0 #000,
+        8px 8px 0 var(--gold-dim),
+        0 0 40px rgba(255,184,0,0.4);
+      animation: slide-down 0.7s cubic-bezier(0.22, 1, 0.36, 1) 0.1s both;
+    }
+
+    .hero-subtitle {
+      font-family: var(--pixel);
+      font-size: clamp(0.5rem, 1.5vw, 0.75rem);
+      letter-spacing: 0.25em;
+      color: var(--white);
+      opacity: 0.7;
+      animation: slide-down 0.7s cubic-bezier(0.22, 1, 0.36, 1) 0.3s both;
+    }
+
+    .insert-coin {
+      margin-top: 16px;
+      font-family: var(--pixel);
+      font-size: clamp(0.5rem, 1.2vw, 0.7rem);
+      letter-spacing: 0.2em;
+      color: var(--white);
+      animation: blink 1.1s steps(1) infinite;
+    }
+    @keyframes blink {
+      0%, 49% { opacity: 1; }
+      50%, 100% { opacity: 0; }
+    }
+
+    .hero-cta-row {
+      display: flex;
+      gap: 20px;
+      flex-wrap: wrap;
+      justify-content: center;
+      animation: slide-down 0.7s cubic-bezier(0.22, 1, 0.36, 1) 0.5s both;
+    }
+
+    /* ── BUTTONS ─────────────────────────────────────────── */
+    .btn {
+      font-family: var(--pixel);
+      font-size: 0.65rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      text-decoration: none;
+      padding: 14px 28px;
+      border: none;
+      display: inline-block;
+      transition: transform 0.1s, box-shadow 0.1s;
+      image-rendering: pixelated;
+    }
+    .btn:active { transform: translate(2px, 2px); }
+
+    .btn-gold {
+      background: var(--gold);
+      color: var(--black);
+      box-shadow: 4px 4px 0 var(--gold-dim), 8px 8px 0 rgba(0,0,0,0.3);
+    }
+    .btn-gold:hover {
+      background: var(--gold-glow);
+      box-shadow: 6px 6px 0 var(--gold-dim), 12px 12px 0 rgba(0,0,0,0.3);
+      transform: translate(-2px, -2px);
+    }
+
+    .btn-outline {
+      background: transparent;
+      color: var(--gold);
+      box-shadow:
+        0 0 0 3px var(--gold),
+        4px 4px 0 var(--gold-dim);
+    }
+    .btn-outline:hover {
+      background: rgba(255,184,0,0.1);
+      transform: translate(-2px,-2px);
+      box-shadow:
+        0 0 0 3px var(--gold-glow),
+        6px 6px 0 var(--gold-dim);
+    }
+
+    /* ── SECTION BASE ────────────────────────────────────── */
+    section {
+      padding: 100px 40px;
+    }
+    .section-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    .section-title {
+      font-family: var(--pixel);
+      font-size: clamp(1rem, 3vw, 1.6rem);
+      color: var(--gold);
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      margin-bottom: 12px;
+      position: relative;
+      display: inline-block;
+    }
+    .section-title::before {
+      content: '▶ ';
+      color: var(--gold);
+      font-size: 0.8em;
+    }
+    .section-divider {
+      width: 80px;
+      height: 4px;
+      background: var(--gold);
+      margin: 16px 0 60px;
+      box-shadow: 4px 4px 0 var(--gold-dim);
+    }
+
+    /* ── BEER SECTION ────────────────────────────────────── */
+    #beer { background: var(--dark); }
+
+    .beer-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 32px;
+    }
+
+    .beer-card {
+      background: #111;
+      padding: 28px 24px;
+      position: relative;
+      transition: transform 0.2s;
+      /* pixel corner border */
+      box-shadow:
+        0 -4px 0 0 var(--gold),
+        0  4px 0 0 var(--gold),
+       -4px 0  0 0 var(--gold),
+        4px 0  0 0 var(--gold),
+        inset 0 0 0 2px #1a1a1a;
+    }
+    .beer-card:hover {
+      transform: translate(-3px, -3px);
+      box-shadow:
+        0 -4px 0 0 var(--gold),
+        0  4px 0 0 var(--gold),
+       -4px 0  0 0 var(--gold),
+        4px 0  0 0 var(--gold),
+        6px 6px 0 var(--gold-dim);
+    }
+
+    .beer-card-badge {
+      position: absolute;
+      top: -12px; right: 16px;
+      background: var(--gold);
+      color: var(--black);
+      font-family: var(--pixel);
+      font-size: 0.45rem;
+      padding: 4px 10px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+
+    .beer-abv {
+      font-family: var(--pixel);
+      font-size: 0.5rem;
+      color: var(--gold);
+      letter-spacing: 0.2em;
+      margin-bottom: 10px;
+    }
+
+    .beer-name {
+      font-family: var(--pixel);
+      font-size: 0.9rem;
+      color: var(--white);
+      line-height: 1.5;
+      margin-bottom: 12px;
+    }
+
+    .beer-style {
+      font-family: var(--pixel);
+      font-size: 0.55rem;
+      color: var(--gold-dim);
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      margin-bottom: 14px;
+    }
+
+    .beer-desc {
+      font-family: var(--pixel);
+      font-size: 0.5rem;
+      line-height: 1.9;
+      color: rgba(240,240,240,0.65);
+    }
+
+    .beer-ibu-bar {
+      margin-top: 18px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .beer-ibu-label {
+      font-family: var(--pixel);
+      font-size: 0.42rem;
+      color: var(--gold);
+      min-width: 28px;
+    }
+    .ibu-track {
+      flex: 1;
+      height: 8px;
+      background: #222;
+      position: relative;
+    }
+    .ibu-fill {
+      height: 100%;
+      background: var(--gold);
+      transition: width 1s 0.3s ease-out;
+      box-shadow: 2px 0 0 var(--gold-dim);
+    }
+
+    /* ── FOOD SECTION ────────────────────────────────────── */
+    #food { background: #050505; }
+
+    .food-columns {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 60px;
+    }
+
+    .food-category-title {
+      font-family: var(--pixel);
+      font-size: 0.7rem;
+      color: var(--gold);
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      margin-bottom: 28px;
+      padding-bottom: 10px;
+      border-bottom: 2px solid var(--gold);
+    }
+
+    .food-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: 12px;
+      padding: 12px 0;
+      border-bottom: 1px solid rgba(255,184,0,0.12);
+      transition: border-color 0.2s;
+    }
+    .food-item:hover { border-color: rgba(255,184,0,0.4); }
+
+    .food-item-name {
+      font-family: var(--pixel);
+      font-size: 0.55rem;
+      color: var(--white);
+      line-height: 1.7;
+    }
+    .food-item-desc {
+      font-family: var(--pixel);
+      font-size: 0.42rem;
+      color: rgba(240,240,240,0.5);
+      margin-top: 4px;
+    }
+    .food-item-price {
+      font-family: var(--pixel);
+      font-size: 0.6rem;
+      color: var(--gold);
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+
+    /* ── SHOP (SHOPIFY) SECTION ───────────────────────────── */
+    #shop {
+      background: linear-gradient(180deg, #050505 0%, #0d0900 50%, #050505 100%);
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* Glowing grid floor effect */
+    #shop::before {
+      content: '';
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      height: 50%;
+      background:
+        linear-gradient(rgba(255,184,0,0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,184,0,0.03) 1px, transparent 1px);
+      background-size: 40px 40px;
+      transform: perspective(600px) rotateX(60deg);
+      transform-origin: bottom center;
+      pointer-events: none;
+    }
+
+    .shop-intro {
+      font-family: var(--pixel);
+      font-size: 0.55rem;
+      line-height: 2;
+      color: rgba(240,240,240,0.6);
+      margin-bottom: 48px;
+      max-width: 600px;
+    }
+
+    .shop-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      gap: 28px;
+      margin-bottom: 56px;
+    }
+
+    .shop-card {
+      background: #0e0a00;
+      position: relative;
+      overflow: hidden;
+      transition: transform 0.25s;
+      cursor: url('./assets/cursor.gif') 16 16, pointer;
+    }
+    .shop-card:hover { transform: translateY(-6px); }
+    .shop-card:hover .shop-card-overlay { opacity: 1; }
+    .shop-card:hover .shop-card-img { transform: scale(1.04); }
+
+    /* Animated pixel border on hover */
+    .shop-card::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border: 3px solid transparent;
+      transition: border-color 0.2s;
+      z-index: 2;
+      pointer-events: none;
+    }
+    .shop-card:hover::before { border-color: var(--gold); }
+
+    .shop-card-img-wrap {
+      aspect-ratio: 1;
+      overflow: hidden;
+      background: #1a1200;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .shop-card-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      image-rendering: pixelated;
+      transition: transform 0.4s ease;
+    }
+
+    /* Placeholder pixel art product art */
+    .shop-card-img-placeholder {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 4rem;
+      background: radial-gradient(circle at 50% 60%, #1a1200, #000);
+    }
+
+    .shop-card-overlay {
+      position: absolute;
+      inset: 0;
+      background: rgba(255,184,0,0.1);
+      opacity: 0;
+      transition: opacity 0.25s;
+      z-index: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .shop-card-overlay-btn {
+      font-family: var(--pixel);
+      font-size: 0.5rem;
+      letter-spacing: 0.1em;
+      background: var(--gold);
+      color: var(--black);
+      padding: 12px 20px;
+      border: none;
+      box-shadow: 3px 3px 0 var(--gold-dim);
+      transform: translateY(10px);
+      transition: transform 0.2s;
+    }
+    .shop-card:hover .shop-card-overlay-btn { transform: translateY(0); }
+
+    .shop-card-body {
+      padding: 18px 16px;
+    }
+    .shop-card-tag {
+      font-family: var(--pixel);
+      font-size: 0.42rem;
+      color: var(--gold);
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+    .shop-card-name {
+      font-family: var(--pixel);
+      font-size: 0.62rem;
+      color: var(--white);
+      line-height: 1.6;
+      margin-bottom: 10px;
+    }
+    .shop-card-price-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .shop-card-price {
+      font-family: var(--pixel);
+      font-size: 0.75rem;
+      color: var(--gold);
+    }
+    .shop-card-stars {
+      font-size: 0.5rem;
+      color: var(--gold);
+      letter-spacing: 2px;
+    }
+
+    /* Featured product (wide) */
+    .shop-card.featured {
+      grid-column: span 2;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+    }
+    .shop-card.featured .shop-card-img-wrap { aspect-ratio: unset; }
+    .shop-card.featured .shop-card-body {
+      padding: 32px 28px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 16px;
+    }
+    .shop-card.featured .shop-card-name {
+      font-size: 0.9rem;
+    }
+    .shop-card-featured-badge {
+      display: inline-block;
+      background: var(--gold);
+      color: var(--black);
+      font-family: var(--pixel);
+      font-size: 0.42rem;
+      padding: 5px 12px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      width: fit-content;
+    }
+
+    /* Shopify powered badge */
+    .shopify-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 20px;
+      border: 2px solid rgba(255,184,0,0.3);
+      font-family: var(--pixel);
+      font-size: 0.42rem;
+      color: rgba(240,240,240,0.4);
+      letter-spacing: 0.1em;
+      margin-top: 48px;
+    }
+    .shopify-badge span { color: var(--gold); }
+
+    /* ── ABOUT TICKER STRIP ──────────────────────────────── */
+    .ticker-strip {
+      background: var(--gold);
+      padding: 14px 0;
+      overflow: hidden;
+      white-space: nowrap;
+      border-top: 3px solid #000;
+      border-bottom: 3px solid #000;
+    }
+    .ticker-inner {
+      display: inline-flex;
+      gap: 80px;
+      animation: ticker 18s linear infinite;
+    }
+    .ticker-item {
+      font-family: var(--pixel);
+      font-size: 0.6rem;
+      color: var(--black);
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      flex-shrink: 0;
+    }
+    .ticker-item::before { content: '★ '; }
+    @keyframes ticker {
+      from { transform: translateX(0); }
+      to   { transform: translateX(-50%); }
+    }
+
+    /* ── CONTACT SECTION ─────────────────────────────────── */
+    #contact { background: var(--dark); }
+
+    .contact-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 60px;
+      align-items: start;
+    }
+
+    .contact-info-block {
+      display: flex;
+      flex-direction: column;
+      gap: 28px;
+    }
+    .contact-info-item {
+      display: flex;
+      gap: 16px;
+      align-items: flex-start;
+    }
+    .contact-icon {
+      font-size: 1.4rem;
+      line-height: 1;
+      flex-shrink: 0;
+      image-rendering: pixelated;
+    }
+    .contact-info-text {
+      font-family: var(--pixel);
+      font-size: 0.5rem;
+      line-height: 2.2;
+      color: var(--white);
+    }
+    .contact-info-label {
+      font-family: var(--pixel);
+      font-size: 0.42rem;
+      color: var(--gold);
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      margin-bottom: 6px;
+    }
+
+    .contact-form {
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+    .contact-form input,
+    .contact-form textarea {
+      width: 100%;
+      background: #111;
+      border: 2px solid rgba(255,184,0,0.25);
+      color: var(--white);
+      font-family: var(--pixel);
+      font-size: 0.52rem;
+      padding: 14px 16px;
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+      resize: none;
+    }
+    .contact-form input::placeholder,
+    .contact-form textarea::placeholder {
+      color: rgba(255,255,255,0.25);
+    }
+    .contact-form input:focus,
+    .contact-form textarea:focus {
+      border-color: var(--gold);
+      box-shadow: 0 0 0 2px rgba(255,184,0,0.2), 4px 4px 0 var(--gold-dim);
+    }
+    .contact-form textarea { min-height: 120px; }
+
+    /* ── FOOTER ──────────────────────────────────────────── */
+    footer {
+      background: #000;
+      border-top: 3px solid var(--gold);
+      padding: 40px;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 20px;
+    }
+    .footer-links {
+      display: flex;
+      gap: 32px;
+      list-style: none;
+    }
+    .footer-links a {
+      font-family: var(--pixel);
+      font-size: 0.45rem;
+      color: rgba(240,240,240,0.45);
+      text-decoration: none;
+      letter-spacing: 0.1em;
+      transition: color 0.2s;
+    }
+    .footer-links a:hover { color: var(--gold); }
+    .footer-copy {
+      font-family: var(--pixel);
+      font-size: 0.42rem;
+      color: rgba(240,240,240,0.25);
+      letter-spacing: 0.15em;
+    }
+
+    /* ── AGE GATE ────────────────────────────────────────── */
+    #age-gate {
+      position: fixed;
+      inset: 0;
+      background: #000;
+      z-index: 10000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      gap: 32px;
+      text-align: center;
+      padding: 40px;
+    }
+    #age-gate.hidden { display: none; }
+
+    .age-gate-title {
+      font-family: var(--pixel);
+      font-size: clamp(1rem, 3vw, 2rem);
+      color: var(--gold);
+      text-shadow: 4px 4px 0 var(--gold-dim);
+      line-height: 1.4;
+    }
+    .age-gate-sub {
+      font-family: var(--pixel);
+      font-size: 0.55rem;
+      color: rgba(255,255,255,0.55);
+      letter-spacing: 0.15em;
+    }
+    .age-gate-buttons {
+      display: flex;
+      gap: 24px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    .age-gate-no {
+      font-family: var(--pixel);
+      font-size: 0.6rem;
+      color: rgba(255,255,255,0.3);
+      cursor: pointer;
+      letter-spacing: 0.1em;
+      margin-top: 8px;
+    }
+
+    /* ── ANIMATIONS ──────────────────────────────────────── */
+    @keyframes slide-down {
+      from { opacity: 0; transform: translateY(-24px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes blink-in {
+      from { opacity: 0; }
+      to   { opacity: 1; }
+    }
+    @keyframes fade-up {
+      from { opacity: 0; transform: translateY(40px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .reveal {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ── PIXEL PROGRESS (HP bars) for fun ───────────────── */
+    .hp-bar-wrap {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-top: 6px;
+    }
+    .hp-label {
+      font-family: var(--pixel);
+      font-size: 0.42rem;
+      color: var(--gold);
+      min-width: 50px;
+    }
+    .hp-track {
+      flex: 1;
+      height: 10px;
+      background: #222;
+      image-rendering: pixelated;
+    }
+    .hp-fill {
+      height: 100%;
+      background: repeating-linear-gradient(
+        90deg,
+        var(--gold) 0, var(--gold) 8px,
+        var(--gold-dim) 8px, var(--gold-dim) 10px
+      );
+    }
+
+    /* ── RESPONSIVE ──────────────────────────────────────── */
+    @media (max-width: 768px) {
+      .nav-links { display: none; }
+      .nav-links.open {
+        display: flex;
+        flex-direction: column;
+        position: fixed;
+        top: 0; left: 0; right: 0;
+        background: rgba(0,0,0,0.97);
+        padding: 100px 40px 40px;
+        gap: 32px;
+        z-index: 999;
+        border-bottom: 3px solid var(--gold);
+      }
+      .nav-links.open a { font-size: 1rem; }
+      .hamburger { display: flex; }
+
+      .food-columns { grid-template-columns: 1fr; gap: 40px; }
+      .shop-card.featured { grid-column: span 1; grid-template-columns: 1fr; }
+      .contact-grid { grid-template-columns: 1fr; }
+      section { padding: 70px 24px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ══════════════════════════════════════════
+       AGE GATE
+  ══════════════════════════════════════════ -->
+  <div id="age-gate">
+    <div style="font-size:4rem; image-rendering:pixelated;">🍺</div>
+    <div class="age-gate-title">ARE YOU OF<br>LEGAL DRINKING AGE?</div>
+    <div class="age-gate-sub">You must be 21+ to enter &nbsp;·&nbsp; Murrieta, CA</div>
+    <div class="age-gate-buttons">
+      <button class="btn btn-gold" onclick="enterSite()">YES, I AM 21+</button>
+      <a href="https://www.alcoholfree.com" class="btn btn-outline">NO, TAKE ME BACK</a>
+    </div>
+    <div class="age-gate-no" onclick="enterSite()">Remember me on this device</div>
+  </div>
+
+  <!-- ══════════════════════════════════════════
+       NAVBAR
+  ══════════════════════════════════════════ -->
+  <nav id="navbar">
+    <a href="#hero" class="nav-logo">
+      <!--
+        REPLACE: Your animated logo.gif
+        Recommended: ~200x80px, transparent background
+      -->
+      <img src="./assets/logo.gif" alt="8-Bit Brewing Co" onerror="this.style.display='none'; this.parentElement.innerHTML='<span style=\'font-family:var(--pixel);font-size:0.9rem;color:var(--gold);text-shadow:2px 2px 0 #c48a00\'>8-BIT<br><span style=\'font-size:0.55rem\'>BREWING CO</span></span>'">
+    </a>
+
+    <button class="hamburger" id="hamburger" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+
+    <ul class="nav-links" id="nav-links">
+      <li><a href="#beer">Beer</a></li>
+      <li><a href="#food">Food</a></li>
+      <li><a href="#shop">Shop</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+
+    <div class="nav-mascot">
+      <!--
+        REPLACE: Your animated mascot character.gif
+        The pixel beer ghost from your screenshot
+      -->
+      <img src="./assets/mascot.gif" alt="8-Bit Mascot" onerror="this.style.display='none'">
+    </div>
+  </nav>
+
+  <!-- ══════════════════════════════════════════
+       HERO
+  ══════════════════════════════════════════ -->
+  <section id="hero">
+    <!--
+      REPLACE: Your animated bg.gif
+      Full bleed background — cityscape, pixels, etc.
+    -->
+    <div class="hero-bg"></div>
+
+    <div class="hero-content">
+      <p class="hero-tagline">★ Murrieta, California ★</p>
+      <h1 class="hero-title">8-BIT<br>BREWING CO.</h1>
+      <p class="hero-subtitle">Craft Beer · Leveled Up</p>
+      <p class="insert-coin">▶ INSERT COIN TO CONTINUE ◀</p>
+      <div class="hero-cta-row">
+        <a href="#beer" class="btn btn-gold">View Tap List</a>
+        <a href="#shop" class="btn btn-outline">Enter Shop</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════
+       TICKER STRIP
+  ══════════════════════════════════════════ -->
+  <div class="ticker-strip" aria-hidden="true">
+    <div class="ticker-inner" id="ticker-inner">
+      <!-- JS duplicates these for seamless loop -->
+      <span class="ticker-item">Now Pouring</span>
+      <span class="ticker-item">Craft Since Day One</span>
+      <span class="ticker-item">Murrieta's Finest Pixels</span>
+      <span class="ticker-item">16 Taps On Draft</span>
+      <span class="ticker-item">Open Thu–Sun</span>
+      <span class="ticker-item">Trivia Nights</span>
+      <span class="ticker-item">Dog Friendly Patio</span>
+      <span class="ticker-item">New Releases Every Month</span>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════
+       BEER SECTION
+  ══════════════════════════════════════════ -->
+  <section id="beer">
+    <div class="section-inner">
+      <h2 class="section-title reveal">Tap List</h2>
+      <div class="section-divider reveal"></div>
+
+      <div class="beer-grid">
+
+        <div class="beer-card reveal">
+          <div class="beer-card-badge">On Tap</div>
+          <div class="beer-abv">ABV 6.2% &nbsp;·&nbsp; IBU 45</div>
+          <div class="beer-name">Power-Up Pale Ale</div>
+          <div class="beer-style">American Pale Ale</div>
+          <p class="beer-desc">Bright citrus forward with a clean hop finish. Cascade & Citra hops bring the extra life.</p>
+          <div class="beer-ibu-bar">
+            <div class="beer-ibu-label">Hops</div>
+            <div class="ibu-track"><div class="ibu-fill" style="width:58%"></div></div>
+          </div>
+          <div class="hp-bar-wrap" style="margin-top:8px">
+            <div class="hp-label">Body</div>
+            <div class="hp-track"><div class="hp-fill" style="width:45%"></div></div>
+          </div>
+        </div>
+
+        <div class="beer-card reveal" style="transition-delay:0.08s">
+          <div class="beer-card-badge">Fan Fave</div>
+          <div class="beer-abv">ABV 7.8% &nbsp;·&nbsp; IBU 70</div>
+          <div class="beer-name">Final Boss IPA</div>
+          <div class="beer-style">West Coast IPA</div>
+          <p class="beer-desc">Resinous pine and tropical fruit. Bitter, bold, and undefeated. This one bites back.</p>
+          <div class="beer-ibu-bar">
+            <div class="beer-ibu-label">Hops</div>
+            <div class="ibu-track"><div class="ibu-fill" style="width:88%"></div></div>
+          </div>
+          <div class="hp-bar-wrap" style="margin-top:8px">
+            <div class="hp-label">Body</div>
+            <div class="hp-track"><div class="hp-fill" style="width:72%"></div></div>
+          </div>
+        </div>
+
+        <div class="beer-card reveal" style="transition-delay:0.16s">
+          <div class="beer-abv">ABV 5.0% &nbsp;·&nbsp; IBU 18</div>
+          <div class="beer-name">Pixel Wheat</div>
+          <div class="beer-style">Hefeweizen</div>
+          <p class="beer-desc">Soft banana and clove esters. Hazy, unfiltered, easy-drinking — your respawn beer.</p>
+          <div class="beer-ibu-bar">
+            <div class="beer-ibu-label">Hops</div>
+            <div class="ibu-track"><div class="ibu-fill" style="width:22%"></div></div>
+          </div>
+          <div class="hp-bar-wrap" style="margin-top:8px">
+            <div class="hp-label">Body</div>
+            <div class="hp-track"><div class="hp-fill" style="width:50%"></div></div>
+          </div>
+        </div>
+
+        <div class="beer-card reveal" style="transition-delay:0.24s">
+          <div class="beer-card-badge">Seasonal</div>
+          <div class="beer-abv">ABV 9.1% &nbsp;·&nbsp; IBU 25</div>
+          <div class="beer-name">Dark World Stout</div>
+          <div class="beer-style">Imperial Stout</div>
+          <p class="beer-desc">Roasted espresso, dark chocolate, and a warming finish. Endgame energy in a glass.</p>
+          <div class="beer-ibu-bar">
+            <div class="beer-ibu-label">Hops</div>
+            <div class="ibu-track"><div class="ibu-fill" style="width:31%"></div></div>
+          </div>
+          <div class="hp-bar-wrap" style="margin-top:8px">
+            <div class="hp-label">Body</div>
+            <div class="hp-track"><div class="hp-fill" style="width:95%"></div></div>
+          </div>
+        </div>
+
+        <div class="beer-card reveal" style="transition-delay:0.32s">
+          <div class="beer-abv">ABV 4.2% &nbsp;·&nbsp; IBU 12</div>
+          <div class="beer-name">1-UP Lager</div>
+          <div class="beer-style">German Lager</div>
+          <p class="beer-desc">Crisp, clean, crushable. The extra life you need on a hot Murrieta afternoon.</p>
+          <div class="beer-ibu-bar">
+            <div class="beer-ibu-label">Hops</div>
+            <div class="ibu-track"><div class="ibu-fill" style="width:15%"></div></div>
+          </div>
+          <div class="hp-bar-wrap" style="margin-top:8px">
+            <div class="hp-label">Body</div>
+            <div class="hp-track"><div class="hp-fill" style="width:30%"></div></div>
+          </div>
+        </div>
+
+        <div class="beer-card reveal" style="transition-delay:0.40s">
+          <div class="beer-card-badge">New</div>
+          <div class="beer-abv">ABV 6.8% &nbsp;·&nbsp; IBU 38</div>
+          <div class="beer-name">Cheat Code Sour</div>
+          <div class="beer-style">Fruited Kettle Sour</div>
+          <p class="beer-desc">Mango, passionfruit and a clean lactic tartness. Unlocks flavor you didn't know existed.</p>
+          <div class="beer-ibu-bar">
+            <div class="beer-ibu-label">Hops</div>
+            <div class="ibu-track"><div class="ibu-fill" style="width:48%"></div></div>
+          </div>
+          <div class="hp-bar-wrap" style="margin-top:8px">
+            <div class="hp-label">Body</div>
+            <div class="hp-track"><div class="hp-fill" style="width:55%"></div></div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════
+       FOOD SECTION
+  ══════════════════════════════════════════ -->
+  <section id="food">
+    <div class="section-inner">
+      <h2 class="section-title reveal">Food Menu</h2>
+      <div class="section-divider reveal"></div>
+
+      <div class="food-columns">
+        <div class="reveal">
+          <div class="food-category-title">▷ Starters</div>
+          <div class="food-item">
+            <div>
+              <div class="food-item-name">Pretzel Dungeon</div>
+              <div class="food-item-desc">Giant soft pretzel, gold mustard, beer cheese</div>
+            </div>
+            <div class="food-item-price">$12</div>
+          </div>
+          <div class="food-item">
+            <div>
+              <div class="food-item-name">Pixel Nachos</div>
+              <div class="food-item-desc">Housemade chips, pico, jalapeño, smoked cheddar</div>
+            </div>
+            <div class="food-item-price">$14</div>
+          </div>
+          <div class="food-item">
+            <div>
+              <div class="food-item-name">Spawn Point Wings</div>
+              <div class="food-item-desc">12 wings · choice of sauce · celery, ranch</div>
+            </div>
+            <div class="food-item-price">$16</div>
+          </div>
+          <div class="food-item">
+            <div>
+              <div class="food-item-name">Side Quest Sliders</div>
+              <div class="food-item-desc">3 mini smash burgers · American cheese · secret sauce</div>
+            </div>
+            <div class="food-item-price">$13</div>
+          </div>
+
+          <div class="food-category-title" style="margin-top:36px">▷ Mains</div>
+          <div class="food-item">
+            <div>
+              <div class="food-item-name">Boss Level Burger</div>
+              <div class="food-item-desc">½ lb smash, double cheddar, caramelized onion, brioche</div>
+            </div>
+            <div class="food-item-price">$17</div>
+          </div>
+          <div class="food-item">
+            <div>
+              <div class="food-item-name">The Dragon Sandwich</div>
+              <div class="food-item-desc">Nashville hot chicken, slaw, pickles, house brioche</div>
+            </div>
+            <div class="food-item-price">$16</div>
+          </div>
+          <div class="food-item">
+            <div>
+              <div class="food-item-name">Tavern Flatbread</div>
+              <div class="food-item-desc">White garlic, mozzarella, basil, prosciutto</div>
+            </div>
+            <div class="food-item-price">$15</div>
+          </div>
+        </div>
+
+        <div class="reveal" style="transition-delay:0.15s">
+          <div class="food-category-title">▷ Shareables</div>
+          <div class="food-item">
+            <div>
+              <div class="food-item-name">XP Board</div>
+              <div class="food-item-desc">Charcuterie, artisan cheese, seasonal accoutrements</div>
+            </div>
+            <div class="food-item-price">$22</div>
+          </div>
+          <div class="food-item">
+            <div>
+              <div class="food-item-name">Party Platter</div>
+              <div class="food-item-desc">Wings, sliders, nachos · feeds 4–6</div>
+            </div>
+            <div class="food-item-price">$48</div>
+          </div>
+
+          <div class="food-category-title" style="margin-top:36px">▷ Desserts</div>
+          <div class="food-item">
+            <div>
+              <div class="food-item-name">Stout Brownie</div>
+              <div class="food-item-desc">Dark World Stout baked in · vanilla ice cream</div>
+            </div>
+            <div class="food-item-price">$9</div>
+          </div>
+          <div class="food-item">
+            <div>
+              <div class="food-item-name">Continue? Cookie Skillet</div>
+              <div class="food-item-desc">Giant warm cookie · whipped cream · 3, 2, 1…</div>
+            </div>
+            <div class="food-item-price">$10</div>
+          </div>
+
+          <div class="food-category-title" style="margin-top:36px">▷ Non-Alcoholic</div>
+          <div class="food-item">
+            <div><div class="food-item-name">House Lemonade</div></div>
+            <div class="food-item-price">$5</div>
+          </div>
+          <div class="food-item">
+            <div><div class="food-item-name">Craft Sodas</div></div>
+            <div class="food-item-price">$4</div>
+          </div>
+          <div class="food-item">
+            <div><div class="food-item-name">Coffee / Espresso</div></div>
+            <div class="food-item-price">$4–6</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════
+       SHOP SECTION (SHOPIFY)
+  ══════════════════════════════════════════ -->
+  <section id="shop">
+    <div class="section-inner">
+      <h2 class="section-title reveal">The Shop</h2>
+      <div class="section-divider reveal"></div>
+      <p class="shop-intro reveal">Level up your gear. Grab merch, crowlers, and limited releases — shipped straight to your door via our Shopify store. No coins required.</p>
+
+      <div class="shop-grid">
+
+        <!-- FEATURED PRODUCT ───────── -->
+        <div class="shop-card featured reveal">
+          <div class="shop-card-img-wrap">
+            <!--
+              REPLACE: Product image or use Shopify product image URL
+              <img src="./assets/shop/hoodie.jpg" ...>
+            -->
+            <div class="shop-card-img-placeholder">🎮</div>
+          </div>
+          <div class="shop-card-body">
+            <div class="shop-card-featured-badge">★ Player 1 Pick</div>
+            <div class="shop-card-name">8-Bit Brew Crew Hoodie</div>
+            <p style="font-family:var(--pixel);font-size:0.48rem;line-height:2;color:rgba(240,240,240,0.6);margin-bottom:8px">
+              Premium heavyweight fleece. Embroidered pixel logo front & back. Pre-shrunk. Sizes S–3XL.
+            </p>
+            <div class="shop-card-price-row">
+              <div class="shop-card-price">$58.00</div>
+              <div class="shop-card-stars">★★★★★</div>
+            </div>
+            <a href="https://your-shopify-store.myshopify.com" target="_blank" class="btn btn-gold" style="margin-top:18px;font-size:0.52rem;display:inline-block">
+              Add to Cart ▶
+            </a>
+          </div>
+        </div>
+
+        <!-- PRODUCT CARDS ───────────── -->
+        <div class="shop-card reveal" style="transition-delay:0.1s">
+          <div class="shop-card-img-wrap">
+            <div class="shop-card-img-placeholder">🍺</div>
+          </div>
+          <div class="shop-card-overlay">
+            <button class="shop-card-overlay-btn">Quick Add ▶</button>
+          </div>
+          <div class="shop-card-body">
+            <div class="shop-card-tag">Drinkware</div>
+            <div class="shop-card-name">Pixel Pint Glass<br>4-Pack</div>
+            <div class="shop-card-price-row">
+              <div class="shop-card-price">$32.00</div>
+              <div class="shop-card-stars">★★★★★</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="shop-card reveal" style="transition-delay:0.2s">
+          <div class="shop-card-img-wrap">
+            <div class="shop-card-img-placeholder">👕</div>
+          </div>
+          <div class="shop-card-overlay">
+            <button class="shop-card-overlay-btn">Quick Add ▶</button>
+          </div>
+          <div class="shop-card-body">
+            <div class="shop-card-tag">Apparel</div>
+            <div class="shop-card-name">Classic Logo Tee</div>
+            <div class="shop-card-price-row">
+              <div class="shop-card-price">$28.00</div>
+              <div class="shop-card-stars">★★★★☆</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="shop-card reveal" style="transition-delay:0.3s">
+          <div class="shop-card-img-wrap">
+            <div class="shop-card-img-placeholder">🧢</div>
+          </div>
+          <div class="shop-card-overlay">
+            <button class="shop-card-overlay-btn">Quick Add ▶</button>
+          </div>
+          <div class="shop-card-body">
+            <div class="shop-card-tag">Headwear</div>
+            <div class="shop-card-name">Pixel Snapback</div>
+            <div class="shop-card-price-row">
+              <div class="shop-card-price">$34.00</div>
+              <div class="shop-card-stars">★★★★★</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="shop-card reveal" style="transition-delay:0.4s">
+          <div class="shop-card-img-wrap">
+            <div class="shop-card-img-placeholder">🎁</div>
+          </div>
+          <div class="shop-card-overlay">
+            <button class="shop-card-overlay-btn">Quick Add ▶</button>
+          </div>
+          <div class="shop-card-body">
+            <div class="shop-card-tag">Gift</div>
+            <div class="shop-card-name">Level Up Gift Set</div>
+            <div class="shop-card-price-row">
+              <div class="shop-card-price">$65.00</div>
+              <div class="shop-card-stars">★★★★★</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="shop-card reveal" style="transition-delay:0.5s">
+          <div class="shop-card-img-wrap">
+            <div class="shop-card-img-placeholder">🥫</div>
+          </div>
+          <div class="shop-card-overlay">
+            <button class="shop-card-overlay-btn">Quick Add ▶</button>
+          </div>
+          <div class="shop-card-body">
+            <div class="shop-card-tag">To-Go</div>
+            <div class="shop-card-name">Crowler — Final Boss IPA</div>
+            <div class="shop-card-price-row">
+              <div class="shop-card-price">$12.00</div>
+              <div class="shop-card-stars">★★★★★</div>
+            </div>
+          </div>
+        </div>
+
+      </div><!-- /shop-grid -->
+
+      <div style="text-align:center; margin-top:16px" class="reveal">
+        <a href="https://your-shopify-store.myshopify.com" target="_blank" class="btn btn-gold" style="font-size:0.6rem">
+          View Full Store ▶
+        </a>
+        <div class="shopify-badge">
+          <span>⚡</span> Powered by <span>Shopify</span> — Secure checkout, worldwide shipping
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════
+       CONTACT SECTION
+  ══════════════════════════════════════════ -->
+  <section id="contact">
+    <div class="section-inner">
+      <h2 class="section-title reveal">Find Us</h2>
+      <div class="section-divider reveal"></div>
+
+      <div class="contact-grid">
+        <div class="contact-info-block reveal">
+          <div class="contact-info-item">
+            <div class="contact-icon">📍</div>
+            <div>
+              <div class="contact-info-label">Location</div>
+              <div class="contact-info-text">
+                [Address Line 1]<br>
+                Murrieta, CA 92562
+              </div>
+            </div>
+          </div>
+          <div class="contact-info-item">
+            <div class="contact-icon">🕐</div>
+            <div>
+              <div class="contact-info-label">Hours</div>
+              <div class="contact-info-text">
+                Thu &nbsp;·&nbsp; 3PM – 9PM<br>
+                Fri &nbsp;·&nbsp; 3PM – 10PM<br>
+                Sat &nbsp;·&nbsp; 12PM – 10PM<br>
+                Sun &nbsp;·&nbsp; 12PM – 7PM
+              </div>
+            </div>
+          </div>
+          <div class="contact-info-item">
+            <div class="contact-icon">📞</div>
+            <div>
+              <div class="contact-info-label">Phone</div>
+              <div class="contact-info-text">(951) 000-0000</div>
+            </div>
+          </div>
+          <div class="contact-info-item">
+            <div class="contact-icon">📱</div>
+            <div>
+              <div class="contact-info-label">Follow</div>
+              <div class="contact-info-text">@8bitbrewingco</div>
+            </div>
+          </div>
+
+          <a href="https://maps.google.com" target="_blank" class="btn btn-outline" style="font-size:0.52rem;margin-top:8px;align-self:flex-start">
+            Get Directions ▶
+          </a>
+        </div>
+
+        <div class="reveal" style="transition-delay:0.15s">
+          <div class="food-category-title" style="margin-bottom:24px">▷ Send a Message</div>
+          <div class="contact-form">
+            <input type="text" placeholder="Player Name" />
+            <input type="email" placeholder="Email Address" />
+            <textarea placeholder="Your message..."></textarea>
+            <button class="btn btn-gold" style="font-size:0.55rem;align-self:flex-start" onclick="this.textContent='Sent! ✓'; this.style.background='#2dc653'">
+              Send Message ▶
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════
+       FOOTER
+  ══════════════════════════════════════════ -->
+  <footer>
+    <img src="./assets/mascot.gif" alt="" style="height:60px;image-rendering:pixelated;opacity:0.7" onerror="this.style.display='none'">
+    <ul class="footer-links">
+      <li><a href="#beer">Beer</a></li>
+      <li><a href="#food">Food</a></li>
+      <li><a href="#shop">Shop</a></li>
+      <li><a href="#contact">Contact</a></li>
+      <li><a href="#">Privacy</a></li>
+    </ul>
+    <div class="footer-copy">
+      © 2025 8-Bit Brewing Co. · Murrieta, CA · All Rights Reserved<br>
+      <span style="color:rgba(255,184,0,0.3)">Please drink responsibly. Must be 21+ to purchase alcohol.</span>
+    </div>
+  </footer>
+
+  <!-- ══════════════════════════════════════════
+       JAVASCRIPT
+  ══════════════════════════════════════════ -->
+  <script>
+    /* ── AGE GATE ──────────────────────────────────────── */
+    const ageGate = document.getElementById('age-gate');
+    if (sessionStorage.getItem('age-verified') === 'true') {
+      ageGate.classList.add('hidden');
+    }
+    function enterSite() {
+      sessionStorage.setItem('age-verified', 'true');
+      ageGate.style.opacity = '0';
+      ageGate.style.transition = 'opacity 0.5s';
+      setTimeout(() => ageGate.classList.add('hidden'), 500);
+    }
+
+    /* ── NAVBAR SCROLL ─────────────────────────────────── */
+    const navbar = document.getElementById('navbar');
+    window.addEventListener('scroll', () => {
+      navbar.classList.toggle('scrolled', window.scrollY > 60);
+    });
+
+    /* ── HAMBURGER ─────────────────────────────────────── */
+    const hamburger = document.getElementById('hamburger');
+    const navLinks  = document.getElementById('nav-links');
+    hamburger.addEventListener('click', () => {
+      navLinks.classList.toggle('open');
+    });
+    navLinks.querySelectorAll('a').forEach(a => {
+      a.addEventListener('click', () => navLinks.classList.remove('open'));
+    });
+
+    /* ── SCROLL REVEAL ─────────────────────────────────── */
+    const reveals = document.querySelectorAll('.reveal');
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          e.target.classList.add('visible');
+          observer.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+    reveals.forEach(r => observer.observe(r));
+
+    /* ── IBU BARS (animate on reveal) ─────────────────── */
+    // Bars use CSS transition delay — triggered by .visible class
+    // They animate automatically when cards enter the viewport
+
+    /* ── TICKER DUPLICATE (seamless loop) ─────────────── */
+    const ticker = document.getElementById('ticker-inner');
+    ticker.innerHTML += ticker.innerHTML; // double it for seamless wrap
+
+    /* ── PIXEL CURSOR TRAIL (optional sparkle effect) ─── */
+    const trail = [];
+    const TRAIL_LENGTH = 6;
+    document.addEventListener('mousemove', (e) => {
+      const dot = document.createElement('div');
+      dot.style.cssText = `
+        position:fixed;
+        left:${e.clientX - 3}px;
+        top:${e.clientY - 3}px;
+        width:6px;height:6px;
+        background:var(--gold);
+        pointer-events:none;
+        z-index:9998;
+        image-rendering:pixelated;
+        opacity:0.7;
+        transition:opacity 0.4s,transform 0.4s;
+      `;
+      document.body.appendChild(dot);
+      trail.push(dot);
+      if (trail.length > TRAIL_LENGTH) {
+        const old = trail.shift();
+        old.style.opacity = '0';
+        old.style.transform = 'scale(0)';
+        setTimeout(() => old.remove(), 400);
+      }
+    });
+
+    /* ── SMOOTH ACTIVE NAV ─────────────────────────────── */
+    const sections = document.querySelectorAll('section[id]');
+    const navAs = document.querySelectorAll('.nav-links a');
+    window.addEventListener('scroll', () => {
+      let cur = '';
+      sections.forEach(s => {
+        if (window.scrollY >= s.offsetTop - 120) cur = s.id;
+      });
+      navAs.forEach(a => {
+        a.style.color = a.getAttribute('href') === `#${cur}` ? 'var(--gold)' : '';
+      });
+    });
+
+    /* ── KONAMI CODE EASTER EGG ────────────────────────── */
+    const KONAMI = [38,38,40,40,37,39,37,39,66,65];
+    let konamiIdx = 0;
+    document.addEventListener('keydown', (e) => {
+      if (e.keyCode === KONAMI[konamiIdx]) {
+        konamiIdx++;
+        if (konamiIdx === KONAMI.length) {
+          konamiIdx = 0;
+          document.body.style.animation = 'none';
+          const msg = document.createElement('div');
+          msg.style.cssText = `
+            position:fixed;inset:0;display:flex;align-items:center;
+            justify-content:center;flex-direction:column;gap:20px;
+            background:rgba(0,0,0,0.93);z-index:9999;text-align:center;
+          `;
+          msg.innerHTML = `
+            <div style="font-family:var(--pixel);font-size:2rem;color:var(--gold);
+              text-shadow:4px 4px 0 var(--gold-dim)">+30 LIVES</div>
+            <div style="font-family:var(--pixel);font-size:0.6rem;color:var(--white);
+              letter-spacing:0.15em">Cheat Code Activated.<br>Free Round On Us. 🍺</div>
+            <div style="font-family:var(--pixel);font-size:0.45rem;color:rgba(255,255,255,0.4);
+              margin-top:8px;animation:blink 1s steps(1) infinite">PRESS ANY KEY TO CONTINUE</div>
+          `;
+          document.body.appendChild(msg);
+          document.addEventListener('keydown', () => msg.remove(), { once: true });
+          msg.addEventListener('click', () => msg.remove());
+        }
+      } else {
+        konamiIdx = 0;
+      }
+    });
+  </script>
+</body>
+</html>
