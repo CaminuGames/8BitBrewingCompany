@@ -201,8 +201,16 @@
     }
     .hero-bg {
       position: absolute;
-      inset: 0;
+      width: 50%; 
+      height: 50%;
+      
+      /* Centers the smaller box within #hero */
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
       overflow: hidden;
+      border-radius: 8px; /* Optional: adds a nice touch to the smaller frame */
+      box-shadow: 0 20px 40px rgba(0,0,0,0.2); /* Optional: depth */
     }
 
     .slide {
