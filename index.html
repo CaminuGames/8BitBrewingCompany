@@ -177,8 +177,8 @@
       align-items: center;
       justify-content: center;
 
-      font-family: var(--pixel);
-      font-size: 0.55rem;
+      font-family: var(--8BitFont);
+      font-size: 1.05rem;
       letter-spacing: 0.08em;
       color: var(--black);
       pointer-events: none;
@@ -202,10 +202,16 @@
     .hero-bg {
       position: absolute;
       inset: 0;
+      overflow: hidden;
+    }
+
+    .slide {
+      position: absolute;
+      inset: 0;
       background-size: cover;
       background-position: center;
-      filter: brightness(0.85);
-      animation: heroSlideshow 25s infinite;
+      opacity: 0;
+      animation: fadeSlides 25s infinite;
     }
     .hero-bg::after {
       content: '';
@@ -229,13 +235,20 @@
     }
     @keyframes blink { 0%,49%{opacity:1} 50%,100%{opacity:0} }
     .hero-btn-row { display: flex; gap: 24px; flex-wrap: wrap; justify-content: center; }
-    @keyframes heroSlideshow {
-      0%   { background-image: url('./photo1.jpg'); }
-      20%  { background-image: url('./photo2.jpg'); }
-      40%  { background-image: url('./photo3.jpg'); }
-      60%  { background-image: url('./photo4.jpg'); }
-      80%  { background-image: url('./photo5.jpg'); }
-      100% { background-image: url('./photo1.jpg'); }
+    /* Images */
+    .s1 { background-image: url('./photo1.jpg'); animation-delay: 0s; }
+    .s2 { background-image: url('./photo2.jpg'); animation-delay: 5s; }
+    .s3 { background-image: url('./photo3.jpg'); animation-delay: 10s; }
+    .s4 { background-image: url('./photo4.jpg'); animation-delay: 15s; }
+    .s5 { background-image: url('./photo5.jpg'); animation-delay: 20s; }
+
+    /* Fade animation */
+    @keyframes fadeSlides {
+      0%   { opacity: 0; }
+      5%   { opacity: 1; }
+      20%  { opacity: 1; }
+      25%  { opacity: 0; }
+      100% { opacity: 0; }
     }
 
     /* ══════════════════════════════════════════════════════
@@ -527,7 +540,13 @@
        HERO
   ══════════════════════════════════════════ -->
   <section id="hero">
-    <div class="hero-bg"></div>
+    <div class="hero-bg">
+      <div class="slide s1"></div>
+      <div class="slide s2"></div>
+      <div class="slide s3"></div>
+      <div class="slide s4"></div>
+      <div class="slide s5"></div>
+    </div>
     <div class="hero-content">
       <div class="hero-logo-wrap">
         <img src="./8bitLogoBLACK.svg" class="hero-main-logo" alt="8-Bit Brewing Co">
