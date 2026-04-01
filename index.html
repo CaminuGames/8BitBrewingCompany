@@ -9,8 +9,7 @@
     /* ── FONTS ────────────────────────────────────────────── */
     @font-face {
       font-family: '8BitFont';
-      src: url('./Thikpanet1-Regular.woff2') format('woff2'),
-           url('./Thikpanet1-Regular.ttf')   format('truetype');
+      src: url('./8bit-font.woff2') format('woff2');
       font-display: swap;
     }
     @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
@@ -72,7 +71,7 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 12px 40px;
+      padding: 12px 30px;
       background: rgba(255,255,255,0.93);
       backdrop-filter: blur(6px);
       border-bottom: 4px solid var(--black);
@@ -206,7 +205,7 @@
     .hero-logo-wrap { animation: logo-float 3s ease-in-out infinite; }
     @keyframes logo-float {
       0%,100% { transform: translateY(0) rotate(-0.5deg); }
-      50%      { transform: translateY(-14px) rotate(0.5deg); }
+      50%      { transform: translateY(-4px) rotate(0.5deg); }
     }
     .hero-main-logo { width: 100%; max-width: 520px; height: auto; image-rendering: pixelated; filter: drop-shadow(4px 4px 0 rgba(0,0,0,0.15)); }
     .insert-coin {
@@ -227,10 +226,10 @@
       padding: 14px 0;
       overflow: hidden;
       white-space: nowrap;
-      border-top: 3px solid var(--gold);
-      border-bottom: 3px solid var(--gold);
+      border-top: 3px solid var(--white);
+      border-bottom: 3px solid var(--white);
     }
-    .ticker-inner { display: inline-flex; gap: 80px; animation: ticker 20s linear infinite; }
+    .ticker-inner { display: inline-flex; gap: 80px; animation: ticker 40s linear infinite; }
     .ticker-item { font-family: var(--pixel); font-size: 0.6rem; color: var(--gold); letter-spacing: 0.15em; text-transform: uppercase; flex-shrink: 0; }
     .ticker-item::before { content: '★ '; }
     @keyframes ticker { from { transform: translateX(0); } to { transform: translateX(-50%); } }
@@ -528,7 +527,7 @@
       <span class="ticker-item">Murrieta's Finest Pixels</span>
       <span class="ticker-item">16 Taps On Draft</span>
       <span class="ticker-item">Craft Since Day One</span>
-      <span class="ticker-item">Open Thu–Sun</span>
+      <span class="ticker-item">Open Mon–Sun</span>
       <span class="ticker-item">Trivia Nights</span>
       <span class="ticker-item">Dog Friendly Patio</span>
       <span class="ticker-item">New Releases Every Month</span>
@@ -549,10 +548,10 @@
         <!-- 1UP BLONDE (uses your custom SVG assets) -->
         <div class="beer-card-wrap reveal">
           <div class="beer-card-frame">
-            <img src="./8bitBrewingBorder.png" class="border-img" alt="">
+            <img src="./8bitBrewingBorder.svg" class="border-img" alt="">
             <div class="beer-card-inner">
               <img src="./OneUPtext.svg"  class="beer-name-img" alt="1UP">
-              <img src="./OneUPIcon.svg"  class="beer-icon-img" alt="">
+              <img src="./OneUPicon.svg"  class="beer-icon-img" alt="">
               <div class="beer-stats">
                 <div class="beer-style-txt">American Blonde Ale</div>
                 <div class="beer-stat-row">
@@ -582,7 +581,7 @@
         <!-- FINAL BOSS IPA -->
         <div class="beer-card-wrap reveal" style="transition-delay:0.1s">
           <div class="beer-card-frame">
-            <img src="./8bitBrewingBorder.png" class="border-img" alt="">
+            <img src="./8bitBrewingBorder.svg" class="border-img" alt="">
             <div class="beer-card-inner">
               <div class="beer-name-img" style="font-family:var(--pixel);font-size:clamp(0.55rem,1.8vw,0.8rem);color:#111;line-height:1.3;display:flex;align-items:center;">Final Boss IPA</div>
               <div class="beer-icon-img" style="font-size:2.2rem;display:flex;align-items:center;justify-content:center;">👾</div>
@@ -603,7 +602,7 @@
         <!-- POWER-UP PALE -->
         <div class="beer-card-wrap reveal" style="transition-delay:0.2s">
           <div class="beer-card-frame">
-            <img src="./8bitBrewingBorder.png" class="border-img" alt="">
+            <img src="./8bitBrewingBorder.svg" class="border-img" alt="">
             <div class="beer-card-inner">
               <div class="beer-name-img" style="font-family:var(--pixel);font-size:clamp(0.55rem,1.8vw,0.8rem);color:#111;line-height:1.3;display:flex;align-items:center;">Power-Up Pale</div>
               <div class="beer-icon-img" style="font-size:2.2rem;display:flex;align-items:center;justify-content:center;">⭐</div>
@@ -624,7 +623,7 @@
         <!-- DARK WORLD STOUT -->
         <div class="beer-card-wrap reveal" style="transition-delay:0.3s">
           <div class="beer-card-frame">
-            <img src="./8bitBrewingBorder.png" class="border-img" alt="">
+            <img src="./8bitBrewingBorder.svg" class="border-img" alt="">
             <div class="beer-card-inner">
               <div class="beer-name-img" style="font-family:var(--pixel);font-size:clamp(0.55rem,1.8vw,0.8rem);color:#111;line-height:1.3;display:flex;align-items:center;">Dark World Stout</div>
               <div class="beer-icon-img" style="font-size:2.2rem;display:flex;align-items:center;justify-content:center;">🌑</div>
