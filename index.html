@@ -146,32 +146,56 @@
     .hamburger.open span:nth-child(2) { opacity: 0; transform: scaleX(0); }
     .hamburger.open span:nth-child(3) { transform: translateY(-9px) rotate(-45deg); }
 
-    /* ══════════════════════════════════════════════════════
-       BUTTONS
-    ══════════════════════════════════════════════════════ */
-    .btn-solid {
-      font-family: var(--pixel);
-      font-size: 0.65rem;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      color: var(--black);
-      text-decoration: none;
-      background: var(--gold);
-      padding: 14px 28px;
-      border: 3px solid var(--black);
-      box-shadow: 4px 4px 0 var(--black);
+    /* ── SVG BUTTON SYSTEM ───────────────────────── */
+
+    .btn {
       display: inline-block;
-      transition: transform 0.1s, box-shadow 0.1s;
+      position: relative;
       cursor: none;
+      border: none;
+      background: none;
+      padding: 0;
     }
-    .btn-solid:hover { transform: translate(-2px,-2px); box-shadow: 6px 6px 0 var(--black); }
-    .btn-solid:active { transform: translate(2px,2px); box-shadow: 2px 2px 0 var(--black); }
-    .btn-ghost {
-      background: transparent;
-      border: 3px solid var(--black);
-      box-shadow: 4px 4px 0 var(--black);
+
+    /* The visual button */
+    .btn::before {
+      content: '';
+      display: block;
+      width: 180px;   /* adjust to your SVG aspect */
+      height: 60px;
+      background-image: url('./button1.svg');
+      background-size: contain;
+      background-repeat: no-repeat;
+      image-rendering: pixelated;
+      transition: transform 0.05s;
     }
-    .btn-ghost:hover { transform: translate(-2px,-2px); box-shadow: 6px 6px 0 var(--black); }
+
+    /* Hover state */
+    .btn:hover::before {
+      background-image: url('./button1hover.svg');
+    }
+
+    /* Pressed state */
+    .btn:active::before {
+      background-image: url('./button1pressed.svg');
+      transform: translateY(2px); /* optional tactile feel */
+    }
+
+    /* Text overlay */
+    .btn span {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      font-family: var(--pixel);
+      font-size: 0.55rem;
+      letter-spacing: 0.08em;
+      color: var(--black);
+      pointer-events: none;
+      text-transform: uppercase;
+    }
 
     /* ══════════════════════════════════════════════════════
        HERO
@@ -471,8 +495,8 @@
     <div class="age-gate-title">ARE YOU 21<br>OR OLDER?</div>
     <div class="age-gate-sub">You must be 21+ to enter · Murrieta, CA</div>
     <div style="display:flex; gap:20px; flex-wrap:wrap; justify-content:center;">
-      <button onclick="enterSite()" class="btn-solid">YES — ENTER ▶</button>
-      <a href="https://www.google.com" class="btn-solid btn-ghost">NO, GO BACK</a>
+      <button onclick="enterSite()" class="btn">YES — ENTER ▶</button>
+      <a href="https://www.google.com" class="btn btn-ghost">NO, GO BACK</a>
     </div>
     <div class="age-gate-no" onclick="enterSite()">Remember me on this device</div>
   </div>
@@ -514,8 +538,8 @@
       </div>
       <p class="insert-coin">▶ INSERT COIN TO CONTINUE ◀</p>
       <div class="hero-btn-row">
-        <a href="#beer" class="btn-solid">Tap List ▶</a>
-        <a href="#shop" class="btn-solid btn-ghost">Enter Shop</a>
+        <a href="#beer" class="btn">Tap List ▶</a>
+        <a href="#shop" class="btn btn-ghost">Enter Shop</a>
       </div>
     </div>
   </section>
@@ -574,7 +598,7 @@
           </div>
           <div class="beer-order-row">
             <span class="beer-price">$7 / Pint</span>
-            <button class="btn-solid" style="font-size:0.55rem;padding:10px 20px;">Order ▶</button>
+            <button class="btn" style="font-size:0.55rem;padding:10px 20px;">Order ▶</button>
           </div>
         </div>
 
@@ -595,7 +619,7 @@
           </div>
           <div class="beer-order-row">
             <span class="beer-price">$8 / Pint</span>
-            <button class="btn-solid" style="font-size:0.55rem;padding:10px 20px;">Order ▶</button>
+            <button class="btn" style="font-size:0.55rem;padding:10px 20px;">Order ▶</button>
           </div>
         </div>
 
@@ -616,7 +640,7 @@
           </div>
           <div class="beer-order-row">
             <span class="beer-price">$7 / Pint</span>
-            <button class="btn-solid" style="font-size:0.55rem;padding:10px 20px;">Order ▶</button>
+            <button class="btn" style="font-size:0.55rem;padding:10px 20px;">Order ▶</button>
           </div>
         </div>
 
@@ -637,7 +661,7 @@
           </div>
           <div class="beer-order-row">
             <span class="beer-price">$9 / Pint</span>
-            <button class="btn-solid" style="font-size:0.55rem;padding:10px 20px;">Order ▶</button>
+            <button class="btn" style="font-size:0.55rem;padding:10px 20px;">Order ▶</button>
           </div>
         </div>
 
@@ -691,23 +715,23 @@
       <div class="shop-grid">
         <div class="shop-card reveal">
           <div class="shop-card-img-wrap">🎮</div>
-          <div class="shop-card-body"><div class="shop-card-tag">★ Player 1 Pick</div><div class="shop-card-name">Brew Crew Hoodie</div><div class="shop-card-price">$58.00</div><button class="btn-solid" style="font-size:0.5rem;padding:10px 16px;width:100%">Add to Cart ▶</button></div>
+          <div class="shop-card-body"><div class="shop-card-tag">★ Player 1 Pick</div><div class="shop-card-name">Brew Crew Hoodie</div><div class="shop-card-price">$58.00</div><button class="btn" style="font-size:0.5rem;padding:10px 16px;width:100%">Add to Cart ▶</button></div>
         </div>
         <div class="shop-card reveal" style="transition-delay:0.1s">
           <div class="shop-card-img-wrap">🍺</div>
-          <div class="shop-card-body"><div class="shop-card-tag">Drinkware</div><div class="shop-card-name">Pixel Pint Glass 4-Pack</div><div class="shop-card-price">$32.00</div><button class="btn-solid" style="font-size:0.5rem;padding:10px 16px;width:100%">Add to Cart ▶</button></div>
+          <div class="shop-card-body"><div class="shop-card-tag">Drinkware</div><div class="shop-card-name">Pixel Pint Glass 4-Pack</div><div class="shop-card-price">$32.00</div><button class="btn" style="font-size:0.5rem;padding:10px 16px;width:100%">Add to Cart ▶</button></div>
         </div>
         <div class="shop-card reveal" style="transition-delay:0.2s">
           <div class="shop-card-img-wrap">👕</div>
-          <div class="shop-card-body"><div class="shop-card-tag">Apparel</div><div class="shop-card-name">Classic Logo Tee</div><div class="shop-card-price">$28.00</div><button class="btn-solid" style="font-size:0.5rem;padding:10px 16px;width:100%">Add to Cart ▶</button></div>
+          <div class="shop-card-body"><div class="shop-card-tag">Apparel</div><div class="shop-card-name">Classic Logo Tee</div><div class="shop-card-price">$28.00</div><button class="btn" style="font-size:0.5rem;padding:10px 16px;width:100%">Add to Cart ▶</button></div>
         </div>
         <div class="shop-card reveal" style="transition-delay:0.3s">
           <div class="shop-card-img-wrap">🧢</div>
-          <div class="shop-card-body"><div class="shop-card-tag">Headwear</div><div class="shop-card-name">Pixel Snapback</div><div class="shop-card-price">$34.00</div><button class="btn-solid" style="font-size:0.5rem;padding:10px 16px;width:100%">Add to Cart ▶</button></div>
+          <div class="shop-card-body"><div class="shop-card-tag">Headwear</div><div class="shop-card-name">Pixel Snapback</div><div class="shop-card-price">$34.00</div><button class="btn" style="font-size:0.5rem;padding:10px 16px;width:100%">Add to Cart ▶</button></div>
         </div>
       </div>
       <div style="text-align:center">
-        <a href="https://your-shopify-store.myshopify.com" target="_blank" class="btn-solid">View Full Store ▶</a>
+        <a href="https://your-shopify-store.myshopify.com" target="_blank" class="btn">View Full Store ▶</a>
         <div class="shopify-badge">⚡ Powered by Shopify — Secure checkout · Worldwide shipping</div>
       </div>
     </div>
@@ -726,7 +750,7 @@
           <div class="contact-info-item"><div class="contact-icon">🕐</div><div><div class="contact-info-label">Hours</div><div class="contact-info-text">Thu · 3PM – 9PM<br>Fri · 3PM – 10PM<br>Sat · 12PM – 10PM<br>Sun · 12PM – 7PM</div></div></div>
           <div class="contact-info-item"><div class="contact-icon">📞</div><div><div class="contact-info-label">Phone</div><div class="contact-info-text">(951) 000-0000</div></div></div>
           <div class="contact-info-item"><div class="contact-icon">📱</div><div><div class="contact-info-label">Follow</div><div class="contact-info-text">@8bitbrewingco</div></div></div>
-          <a href="https://maps.google.com" target="_blank" class="btn-solid" style="font-size:0.52rem;align-self:flex-start">Get Directions ▶</a>
+          <a href="https://maps.google.com" target="_blank" class="btn" style="font-size:0.52rem;align-self:flex-start">Get Directions ▶</a>
         </div>
         <div class="reveal" style="transition-delay:0.15s">
           <div class="form-section-hdr">▷ Send a Message</div>
@@ -734,7 +758,7 @@
             <input type="text" placeholder="Player Name" />
             <input type="email" placeholder="Email Address" />
             <textarea placeholder="Your message..."></textarea>
-            <button class="btn-solid" style="font-size:0.55rem;align-self:flex-start"
+            <button class="btn" style="font-size:0.55rem;align-self:flex-start"
               onclick="this.textContent='Sent! ✓'; this.style.background='#2dc653'">Send Message ▶</button>
           </div>
         </div>
