@@ -79,8 +79,8 @@
     }
     .nav-links a {
       font-family: var(--pixel);
-      font-size: 10rem;
-      letter-spacing: 1em;
+      font-size: 1.2rem;
+      letter-spacing: .25em;
       color: var(--black);
       text-decoration: none;
       text-transform: uppercase;
@@ -178,8 +178,8 @@
       justify-content: center;
 
       font-family: var(--8BitFont);
-      font-size: 10rem;
-      letter-spacing: 1em;
+      font-size: 1.2rem;
+      letter-spacing: .25em;
       color: var(--black);
       pointer-events: none;
       text-transform: uppercase;
@@ -228,8 +228,8 @@
     .hero-main-logo { width: 100%; max-width: 520px; height: auto; image-rendering: pixelated; filter: drop-shadow(4px 4px 0 rgba(0,0,0,0.15)); }
     .insert-coin {
       font-family: var(--pixel);
-      font-size: clamp(10rem, 12vw, 7rem);
-      letter-spacing: 1em;
+      font-size: clamp(1.2rem, 1vw, 0.7rem);
+      letter-spacing: .25em;
       color: var(--black);
       animation: blink 1.1s steps(1) infinite;
     }
@@ -263,7 +263,7 @@
       border-bottom: 3px solid var(--white);
     }
     .ticker-inner { display: inline-flex; gap: 80px; animation: ticker 40s linear infinite; }
-    .ticker-item { font-family: var(--pixel); font-size: 4rem; color: var(--gold); letter-spacing: 0.6em; text-transform: uppercase; flex-shrink: 0; }
+    .ticker-item { font-family: var(--pixel); font-size: 0.9rem; color: var(--gold); letter-spacing: 0.6em; text-transform: uppercase; flex-shrink: 0; }
     .ticker-item::before { content: '★ '; }
     @keyframes ticker { from { transform: translateX(0); } to { transform: translateX(-50%); } }
 
@@ -274,10 +274,10 @@
     .section-inner { max-width: 1200px; margin: 0 auto; }
     .section-title {
       font-family: var(--pixel);
-      font-size: clamp(12rem, 9vw, 6rem);
+      font-size: clamp(1.5rem, 1vw, 1.5rem);
       color: var(--black);
       text-transform: uppercase;
-      letter-spacing: 1em;
+      letter-spacing: .25em;
       margin-bottom: 12px;
       display: inline-block;
     }
@@ -355,18 +355,18 @@
     }
     .beer-style-txt {
       font-family: var(--pixel);
-      font-size: clamp(5rem, 2vw, 2rem);
+      font-size: clamp(1rem, 0.2vw, 0.8rem);
       color: rgba(0,0,0,0.5);
-      letter-spacing: 0.5em;
+      letter-spacing: 0.2em;
       text-transform: uppercase;
       margin-bottom: 4px;
     }
     .beer-stat-row { display: flex; justify-content: space-between; align-items: center; gap: 8px; }
     .beer-stat-label {
       font-family: var(--pixel);
-      font-size: clamp(2rem, 1vw, 1.4rem);
+      font-size: clamp(1rem, 0.2vw, 0.8rem);
       color: var(--black);
-      letter-spacing: 0.3em;
+      letter-spacing: 0.2em;
       text-transform: uppercase;
       white-space: nowrap;
       min-width: 36px;
@@ -377,7 +377,7 @@
 
     /* Row below the card frame */
     .beer-order-row { display: flex; align-items: center; justify-content: space-between; width: 100%; padding: 0 4px; }
-    .beer-price { font-family: var(--pixel); font-size: 12rem; color: var(--black); }
+    .beer-price { font-family: var(--pixel); font-size: 1.1rem; color: var(--black); }
 
     /* ══════════════════════════════════════════════════════
        FOOD SECTION
@@ -386,9 +386,9 @@
     .food-columns { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; }
     .food-category-title {
       font-family: var(--pixel);
-      font-size: 4rem;
+      font-size: 1.2rem;
       color: var(--black);
-      letter-spacing: 0.8em;
+      letter-spacing: 0.2em;
       text-transform: uppercase;
       margin-bottom: 24px;
       padding-bottom: 10px;
@@ -396,25 +396,25 @@
     }
     .food-item { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; padding: 12px 0; border-bottom: 1px solid rgba(0,0,0,0.12); transition: border-color 0.2s; }
     .food-item:hover { border-color: var(--gold); }
-    .food-item-name { font-family: var(--pixel); font-size: 2rem; color: var(--black); line-height: 1.7; }
-    .food-item-desc { font-family: var(--pixel); font-size: 2rem; color: rgba(0,0,0,0.5); margin-top: 4px; }
-    .food-item-price { font-family: var(--pixel); font-size: 2rem; color: var(--black); white-space: nowrap; flex-shrink: 0; }
+    .food-item-name { font-family: var(--pixel); font-size: 1rem; color: var(--black); line-height: 1.7; }
+    .food-item-desc { font-family: var(--pixel); font-size: 1rem; color: rgba(0,0,0,0.5); margin-top: 4px; }
+    .food-item-price { font-family: var(--pixel); font-size: 1rem; color: var(--black); white-space: nowrap; flex-shrink: 0; }
 
     /* ══════════════════════════════════════════════════════
        SHOP SECTION
     ══════════════════════════════════════════════════════ */
     #shop { background: var(--offwhite); border-top: 4px solid var(--black); border-bottom: 4px solid var(--black); }
-    .shop-intro { font-family: var(--pixel); font-size:2rem; line-height: 2; color: rgba(0,0,0,0.6); margin-bottom: 48px; max-width: 600px; }
+    .shop-intro { font-family: var(--pixel); font-size:1.65rem; line-height: 2; color: rgba(0,0,0,0.6); margin-bottom: 48px; max-width: 600px; }
     .shop-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 28px; margin-bottom: 48px; }
     .shop-card { background: var(--white); border: 3px solid var(--black); box-shadow: 5px 5px 0 var(--black); transition: transform 0.15s, box-shadow 0.15s; }
     .shop-card:hover { transform: translate(-3px,-3px); box-shadow: 8px 8px 0 var(--black); }
-    .shop-card-img-wrap { aspect-ratio: 1; background: var(--offwhite); display: flex; align-items: center; justify-content: center; font-size: 4rem; border-bottom: 2px solid var(--black); overflow: hidden; }
+    .shop-card-img-wrap { aspect-ratio: 1; background: var(--offwhite); display: flex; align-items: center; justify-content: center; font-size: 1rem; border-bottom: 2px solid var(--black); overflow: hidden; }
     .shop-card-img-wrap img { width: 100%; height: 100%; object-fit: cover; }
     .shop-card-body { padding: 16px; }
-    .shop-card-tag { font-family: var(--pixel); font-size: 2rem; color: var(--gold-dim); letter-spacing: 0.15em; text-transform: uppercase; margin-bottom: 6px; }
-    .shop-card-name { font-family: var(--pixel); font-size: 2rem; color: var(--black); line-height: 1.6; margin-bottom: 10px; }
-    .shop-card-price { font-family: var(--pixel); font-size: 2rem; color: var(--black); margin-bottom: 12px; }
-    .shopify-badge { display: inline-flex; align-items: center; gap: 10px; font-family: var(--pixel); font-size: 0.42rem; color: rgba(0,0,0,0.4); letter-spacing: 0.1em; margin-top: 32px; border: 2px solid rgba(0,0,0,0.15); padding: 10px 16px; }
+    .shop-card-tag { font-family: var(--pixel); font-size: 1.4rem; color: var(--gold-dim); letter-spacing: 0.15em; text-transform: uppercase; margin-bottom: 6px; }
+    .shop-card-name { font-family: var(--pixel); font-size: 1rem; color: var(--black); line-height: 1.6; margin-bottom: 10px; }
+    .shop-card-price { font-family: var(--pixel); font-size: 1rem; color: var(--black); margin-bottom: 12px; }
+    .shopify-badge { display: inline-flex; align-items: center; gap: 10px; font-family: var(--pixel); font-size: 0.8rem; color: rgba(0,0,0,0.4); letter-spacing: 0.1em; margin-top: 32px; border: 2px solid rgba(0,0,0,0.15); padding: 10px 16px; }
 
     /* ══════════════════════════════════════════════════════
        CONTACT
@@ -423,24 +423,24 @@
     .contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: start; }
     .contact-info-block { display: flex; flex-direction: column; gap: 28px; }
     .contact-info-item { display: flex; gap: 16px; align-items: flex-start; }
-    .contact-icon { font-size: 3rem; flex-shrink: 0; }
-    .contact-info-label { font-family: var(--pixel); font-size: 2rem; color: var(--gold-dim); letter-spacing: 0.15em; text-transform: uppercase; margin-bottom: 6px; }
-    .contact-info-text { font-family: var(--pixel); font-size: 2rem; line-height: 2.2; color: var(--black); }
+    .contact-icon { font-size: 1.2rem; flex-shrink: 0; }
+    .contact-info-label { font-family: var(--pixel); font-size: 1rem; color: var(--gold-dim); letter-spacing: 0.15em; text-transform: uppercase; margin-bottom: 6px; }
+    .contact-info-text { font-family: var(--pixel); font-size: 1rem; line-height: 2.2; color: var(--black); }
     .contact-form { display: flex; flex-direction: column; gap: 18px; }
     .contact-form input, .contact-form textarea { width: 100%; background: var(--offwhite); border: 2px solid var(--black); color: var(--black); font-family: var(--pixel); font-size: 0.52rem; padding: 14px 16px; outline: none; transition: box-shadow 0.2s; resize: none; }
     .contact-form input:focus, .contact-form textarea:focus { box-shadow: 4px 4px 0 var(--gold); }
     .contact-form input::placeholder, .contact-form textarea::placeholder { color: rgba(0,0,0,0.3); }
     .contact-form textarea { min-height: 120px; }
-    .form-section-hdr { font-family: var(--pixel); font-size: 2rem; color: var(--black); letter-spacing: 0.15em; text-transform: uppercase; margin-bottom: 24px; padding-bottom: 10px; border-bottom: 3px solid var(--black); }
+    .form-section-hdr { font-family: var(--pixel); font-size: 1rem; color: var(--black); letter-spacing: 0.15em; text-transform: uppercase; margin-bottom: 24px; padding-bottom: 10px; border-bottom: 3px solid var(--black); }
 
     /* ══════════════════════════════════════════════════════
        FOOTER
     ══════════════════════════════════════════════════════ */
     footer { background: var(--black); border-top: 4px solid var(--gold); padding: 40px; text-align: center; display: flex; flex-direction: column; align-items: center; gap: 20px; }
     .footer-links { display: flex; gap: 32px; list-style: none; }
-    .footer-links a { font-family: var(--pixel); font-size: 1rem; color: rgba(255,255,255,0.4); text-decoration: none; letter-spacing: 0.1em; transition: color 0.2s; }
+    .footer-links a { font-family: var(--pixel); font-size: 0.8rem; color: rgba(255,255,255,0.4); text-decoration: none; letter-spacing: 0.1em; transition: color 0.2s; }
     .footer-links a:hover { color: var(--gold); }
-    .footer-copy { font-family: var(--pixel); font-size: 1rem; color: rgba(255,255,255,0.25); letter-spacing: 0.15em; line-height: 2; }
+    .footer-copy { font-family: var(--pixel); font-size: 0.8rem; color: rgba(255,255,255,0.25); letter-spacing: 0.15em; line-height: 2; }
 
     /* ══════════════════════════════════════════════════════
        AGE GATE
@@ -455,9 +455,9 @@
     }
     #age-gate.hidden { display: none; }
     .age-gate-logo { max-width: 320px; width: 100%; image-rendering: pixelated; }
-    .age-gate-title { font-family: var(--pixel); font-size: clamp(4rem, 3vw, 2rem); color: var(--black); line-height: 1.5; text-shadow: 3px 3px 0 var(--gold); }
-    .age-gate-sub { font-family: var(--pixel); font-size: 4rem; color: rgba(0,0,0,0.6); letter-spacing: 0.15em; }
-    .age-gate-no { font-family: var(--pixel); font-size: 4rem; color: rgba(0,0,0,0.3); cursor: none; letter-spacing: 0.1em; }
+    .age-gate-title { font-family: var(--pixel); font-size: clamp(1.2rem, 1vw, 0.25rem); color: var(--black); line-height: 1.5; text-shadow: 3px 3px 0 var(--gold); }
+    .age-gate-sub { font-family: var(--pixel); font-size: 1rem; color: rgba(0,0,0,0.6); letter-spacing: 0.15em; }
+    .age-gate-no { font-family: var(--pixel); font-size: 1rem; color: rgba(0,0,0,0.3); cursor: none; letter-spacing: 0.1em; }
 
     /* ══════════════════════════════════════════════════════
        SCROLL REVEAL
@@ -478,7 +478,7 @@
         padding: 120px 48px 48px; gap: 36px;
         z-index: 999; border-bottom: 4px solid var(--black); overflow-y: auto;
       }
-      .nav-links.open a { font-size: 2rem; }
+      .nav-links.open a { font-size: 1.25rem; }
       .hamburger { display: flex; order: 4; }
       .nav-mascot { order: 3; }
       .nav-mascot img { height: 64px; }
@@ -624,8 +624,8 @@
           <div class="beer-card-frame">
             <img src="./8bitBrewingBorder.svg" class="border-img" alt="">
             <div class="beer-card-inner">
-              <div class="beer-name-img" style="font-family:var(--pixel);font-size:clamp(0.55rem,1.8vw,0.8rem);color:#111;line-height:1.3;display:flex;align-items:center;">Final Boss IPA</div>
-              <div class="beer-icon-img" style="font-size:2.2rem;display:flex;align-items:center;justify-content:center;">👾</div>
+              <div class="beer-name-img" style="font-family:var(--pixel);font-size:clamp(0.85rem,1.8vw,0.8rem);color:#111;line-height:1.3;display:flex;align-items:center;">Final Boss IPA</div>
+              <div class="beer-icon-img" style="font-size:2rem;display:flex;align-items:center;justify-content:center;">👾</div>
               <div class="beer-stats">
                 <div class="beer-style-txt">West Coast IPA</div>
                 <div class="beer-stat-row"><span class="beer-stat-label">ABV</span><div class="beer-stat-bar-track"><div class="beer-stat-bar-fill" style="width:78%"></div></div><span class="beer-stat-val">7.8%</span></div>
@@ -647,8 +647,8 @@
           <div class="beer-card-frame">
             <img src="./8bitBrewingBorder.svg" class="border-img" alt="">
             <div class="beer-card-inner">
-              <div class="beer-name-img" style="font-family:var(--pixel);font-size:clamp(0.55rem,1.8vw,0.8rem);color:#111;line-height:1.3;display:flex;align-items:center;">Power-Up Pale</div>
-              <div class="beer-icon-img" style="font-size:2.2rem;display:flex;align-items:center;justify-content:center;">⭐</div>
+              <div class="beer-name-img" style="font-family:var(--pixel);font-size:clamp(0.85rem,1.8vw,0.8rem);color:#111;line-height:1.3;display:flex;align-items:center;">Power-Up Pale</div>
+              <div class="beer-icon-img" style="font-size:2rem;display:flex;align-items:center;justify-content:center;">⭐</div>
               <div class="beer-stats">
                 <div class="beer-style-txt">American Pale Ale</div>
                 <div class="beer-stat-row"><span class="beer-stat-label">ABV</span><div class="beer-stat-bar-track"><div class="beer-stat-bar-fill" style="width:62%"></div></div><span class="beer-stat-val">6.2%</span></div>
@@ -670,8 +670,8 @@
           <div class="beer-card-frame">
             <img src="./8bitBrewingBorder.svg" class="border-img" alt="">
             <div class="beer-card-inner">
-              <div class="beer-name-img" style="font-family:var(--pixel);font-size:clamp(0.55rem,1.8vw,0.8rem);color:#111;line-height:1.3;display:flex;align-items:center;">Dark World Stout</div>
-              <div class="beer-icon-img" style="font-size:2.2rem;display:flex;align-items:center;justify-content:center;">🌑</div>
+              <div class="beer-name-img" style="font-family:var(--pixel);font-size:clamp(0.85rem,1.8vw,0.8rem);color:#111;line-height:1.3;display:flex;align-items:center;">Dark World Stout</div>
+              <div class="beer-icon-img" style="font-size:2rem;display:flex;align-items:center;justify-content:center;">🌑</div>
               <div class="beer-stats">
                 <div class="beer-style-txt">Imperial Stout · Seasonal</div>
                 <div class="beer-stat-row"><span class="beer-stat-label">ABV</span><div class="beer-stat-bar-track"><div class="beer-stat-bar-fill" style="width:91%"></div></div><span class="beer-stat-val">9.1%</span></div>
@@ -738,19 +738,19 @@
       <div class="shop-grid">
         <div class="shop-card reveal">
           <div class="shop-card-img-wrap">🎮</div>
-          <div class="shop-card-body"><div class="shop-card-tag">★ Player 1 Pick</div><div class="shop-card-name">Brew Crew Hoodie</div><div class="shop-card-price">$58.00</div><button class="btn" style="font-size:0.5rem;padding:10px 16px;width:100%">Add to Cart ▶</button></div>
+          <div class="shop-card-body"><div class="shop-card-tag">★ Player 1 Pick</div><div class="shop-card-name">Brew Crew Hoodie</div><div class="shop-card-price">$58.00</div><button class="btn" style="font-size:0.8rem;padding:10px 16px;width:100%">Add to Cart ▶</button></div>
         </div>
         <div class="shop-card reveal" style="transition-delay:0.1s">
           <div class="shop-card-img-wrap">🍺</div>
-          <div class="shop-card-body"><div class="shop-card-tag">Drinkware</div><div class="shop-card-name">Pixel Pint Glass 4-Pack</div><div class="shop-card-price">$32.00</div><button class="btn" style="font-size:0.5rem;padding:10px 16px;width:100%">Add to Cart ▶</button></div>
+          <div class="shop-card-body"><div class="shop-card-tag">Drinkware</div><div class="shop-card-name">Pixel Pint Glass 4-Pack</div><div class="shop-card-price">$32.00</div><button class="btn" style="font-size:0.8rem;padding:10px 16px;width:100%">Add to Cart ▶</button></div>
         </div>
         <div class="shop-card reveal" style="transition-delay:0.2s">
           <div class="shop-card-img-wrap">👕</div>
-          <div class="shop-card-body"><div class="shop-card-tag">Apparel</div><div class="shop-card-name">Classic Logo Tee</div><div class="shop-card-price">$28.00</div><button class="btn" style="font-size:0.5rem;padding:10px 16px;width:100%">Add to Cart ▶</button></div>
+          <div class="shop-card-body"><div class="shop-card-tag">Apparel</div><div class="shop-card-name">Classic Logo Tee</div><div class="shop-card-price">$28.00</div><button class="btn" style="font-size:0.8rem;padding:10px 16px;width:100%">Add to Cart ▶</button></div>
         </div>
         <div class="shop-card reveal" style="transition-delay:0.3s">
           <div class="shop-card-img-wrap">🧢</div>
-          <div class="shop-card-body"><div class="shop-card-tag">Headwear</div><div class="shop-card-name">Pixel Snapback</div><div class="shop-card-price">$34.00</div><button class="btn" style="font-size:0.5rem;padding:10px 16px;width:100%">Add to Cart ▶</button></div>
+          <div class="shop-card-body"><div class="shop-card-tag">Headwear</div><div class="shop-card-name">Pixel Snapback</div><div class="shop-card-price">$34.00</div><button class="btn" style="font-size:0.8rem;padding:10px 16px;width:100%">Add to Cart ▶</button></div>
         </div>
       </div>
       <div style="text-align:center">
@@ -781,7 +781,7 @@
             <input type="text" placeholder="Player Name" />
             <input type="email" placeholder="Email Address" />
             <textarea placeholder="Your message..."></textarea>
-            <button class="btn" style="font-size:2rem;align-self:flex-start"
+            <button class="btn" style="font-size:1.5rem;align-self:flex-start"
               onclick="this.textContent='Sent! ✓'; this.style.background='#2dc653'">Send Message ▶</button>
           </div>
         </div>
@@ -880,8 +880,8 @@
           const msg = document.createElement('div');
           msg.style.cssText = 'position:fixed;inset:0;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:20px;background:rgba(255,255,255,0.96);z-index:9999;text-align:center;padding:40px;';
           msg.innerHTML = `<div style="font-family:var(--pixel);font-size:2rem;color:var(--black);text-shadow:4px 4px 0 var(--gold)">+30 LIVES</div>
-            <div style="font-family:var(--pixel);font-size:0.6rem;color:var(--black);letter-spacing:0.15em">Cheat Code Activated.<br>Free Round On Us. 🍺</div>
-            <div style="font-family:var(--pixel);font-size:0.45rem;color:rgba(0,0,0,0.4);margin-top:8px">CLICK OR PRESS ANY KEY TO CONTINUE</div>`;
+            <div style="font-family:var(--pixel);font-size:0.85rem;color:var(--black);letter-spacing:0.15em">Cheat Code Activated.<br>Free Round On Us. 🍺</div>
+            <div style="font-family:var(--pixel);font-size:0.7rem;color:rgba(0,0,0,0.4);margin-top:8px">CLICK OR PRESS ANY KEY TO CONTINUE</div>`;
           document.body.appendChild(msg);
           const close = () => msg.remove();
           document.addEventListener('keydown', close, { once: true });
